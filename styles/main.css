@@ -1,0 +1,79 @@
+@font-face{
+    font-family: 'Slabo';
+    src: url(../misc/fonts/Slabo27px-Regular.ttf);
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face{
+    font-family: 'ZenDots';
+    src: url(../misc/fonts/ZenDots-Regular.ttf);
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --primary-color: #FFEAD0;
+    --secondary-color: #2C6E49;
+    --tertiary-color-1: #554348;
+    --background-color: #7C9EB2;
+    --text-color: #333333;
+    --font-primary: 'Slabo', Georgia, serif;
+    --font-secondary: 'ZenDots', Times, serif ;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-primary);
+}
+
+.background_img{
+    background-image: url("../misc/images/landscape_background_steelblue.png");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size:cover;
+    box-shadow: inset 3px 0px 20px 1px white;
+}
+#title *{
+    font-family: var(--font-secondary);
+
+}
+#title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4em;
+}
+#login_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#form_login{
+    border: 2px solid var(--tertiary-color-1);
+    padding: 2em;
+    margin-bottom: 2em;
+}
+label, input{
+    display: block;
+    margin-bottom: .2em;
+}
+#button_submit{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    max-width: 5em;
+    width: 100%;
+    text-align: center;
+}
+#links{
+    display: flex;
+    flex-direction: row;
+    gap: .5em;
+    margin-bottom: 3em;
+}

@@ -8,7 +8,7 @@
 </header>
 <body>
     <main>
-        <div id="container">
+        <div id="site_container" class="background_img">
             <div id="login_container">
                 <div id="title">
                     <h1>E.A.R.T.H</h1>
@@ -24,7 +24,7 @@
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" required>
                         <br>
-                        <button type="submit">Login</button>
+                        <button type="submit" id="button_submit">Login</button>
                     </form>
                 </div>
                 <div id="links">
