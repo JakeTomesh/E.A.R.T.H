@@ -1,7 +1,9 @@
 <?php 
 class User{
-    private $id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role, $dataCreated, $dateUpdated;
-    public function __construct($liscenceId, $email, $firstName, $lastName, $passwordHash, $role){
+    private $id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated;
+    
+    public function __construct($id,$liscenceId, $email, $firstName, $lastName, $passwordHash, $role){
+        $this->id = $id;
         $this->liscenceId = $liscenceId;
         $this->email = $email;
         $this->firstName = $firstName;
@@ -10,8 +12,8 @@ class User{
         $this->role = $role;
     }
     //OVERLOADED CONSTRUCTORS
-    public static function withDates($liscenceId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated){
-        $instance = new self($liscenceId, $email, $firstName, $lastName, $passwordHash, $role);
+    public static function withDates($id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated){
+        $instance = new self($id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role);
         $instance->dateCreated = $dateCreated;
         $instance->dateUpdated = $dateUpdated;
         return $instance;
@@ -44,8 +46,7 @@ class User{
     public function getDateUpdated(){
         return $this->dateUpdated;
     }
+   
 }
 
-
-
-?>
+//end of file

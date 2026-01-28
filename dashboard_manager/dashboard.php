@@ -1,10 +1,13 @@
+<?php 
+    $message = isset($message) ? $message : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'include/head.php'; ?>
+    <?php include '../include/head.php'; ?>
 </head>
 <header>
-    <?php include 'include/header.php'; ?>
+    <?php include '../include/header.php'; ?>
 </header>
 <body>
     <main>
@@ -15,6 +18,7 @@
                     <h2>Emission and Resource Tracking Hub</h2>
                 </div>
                 <div id="dashboard_container">
+                    <h2><?php echo $message; ?></h2>
 
                 
                 </div>

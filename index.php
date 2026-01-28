@@ -1,7 +1,11 @@
+<?php 
+    $message = isset($message) ? $message : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include 'include/head.php'; ?>
+    <link rel="stylesheet" href="styles/login.css">
 </head>
 <header>
     <?php include 'include/header.php'; ?>
@@ -14,6 +18,7 @@
                     <h1>E.A.R.T.H</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
                 </div>
+                <div><span><?php echo $message;?></span></div>
                 <div id="form_login">
                     <form action="user_manager/index.php" method="POST">
                         <input type="hidden" name="controllerRequest" value="user_login">
@@ -31,7 +36,7 @@
                     <a href="forgot_password.php">Forgot Password?</a>
                     <a href="register.php">Register a company</a>
                 </div>
-
+                <a href="user_manager/index.php?controllerRequest=user_register_nav">Register</a>
             </div>
         </div>
     </main>
