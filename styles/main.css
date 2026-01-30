@@ -14,10 +14,10 @@
 }
 
 :root {
-    --primary-color: #FFEAD0;
+    --primary-color: #554348;
     --secondary-color: #2C6E49;
-    --tertiary-color-1: #554348;
-    --background-color: #7C9EB2;
+    --tertiary-color-1: #8B4513;
+    --background-color: #a0b6c4c0;
     --text-color: #333333;
     --font-primary: 'Slabo', Georgia, serif;
     --font-secondary: 'ZenDots', Times, serif ;
@@ -28,8 +28,23 @@
     box-sizing: border-box;
     font-family: var(--font-primary);
 }
-
+html, body{
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+body{
+    min-width: 100vw;
+    min-height: 100vh;
+}
+#logo{
+    position: absolute;
+    top: auto;
+}
 .background_img{
+    min-width: 100vw;
+    min-height: 100vh;
     background-image: url("../misc/images/landscape_background_steelblue.png");
     background-repeat: no-repeat;
     background-position: center top;
@@ -45,5 +60,65 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 4em;
+    margin-bottom: 1em;
+}
+#title h1{
+    color: var(--primary-color)
+}
+#title h2{
+    text-align: center;
+}
+#animated_line {
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(34, 33, 37, 0.856);
+    border-radius: 10px;
+    margin-top: 10px;
+    transform: scaleX(0);
+    transform-origin: center;
+    animation: drawLine 2s ease-out forwards;
+}
+
+@keyframes drawLine {
+    to {
+        transform: scaleX(.7);
+    }
+}
+#user_div{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    position: relative;
+}
+#title_message{
+   margin: 0 auto;
+}
+#logout{
+   position: absolute;
+   right: 0;
+   margin-right: 2em;
+   padding: .1em 1em;
+}
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #7a7a7a41;
+    color: var(--text-color);
+    font-size: .7rem;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--primary-color);
+}
+.btn:hover {
+    background-color: #555;
+    color: white;
+}
+.error_message{
+    display: flex;
+    color: red;
+    margin: 1em;
+    text-align: center;
+    text-shadow: 1px 1px 5px rgb(97, 97, 97);
 }

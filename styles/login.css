@@ -5,13 +5,21 @@
     justify-content: center;
 }
 #form_login{
-    border: 2px solid var(--tertiary-color-1);
+    border: 2px solid var(--primary-color);
     padding: 2em;
     margin-bottom: 2em;
+    width: 20em;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 label, input{
     display: block;
     margin-bottom: .2em;
+    width: 100%;
 }
 #button_submit{
     display: flex;
@@ -27,4 +35,7 @@ label, input{
     flex-direction: row;
     gap: .5em;
     margin-bottom: 3em;
+}
+.error_message{
+    max-width: fit-content;
 }

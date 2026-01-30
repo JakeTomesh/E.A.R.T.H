@@ -34,25 +34,29 @@ if($controllerAction == 'user_register_nav'){
 }
 //-----------USER LOGIN-----------//
 else if($controllerAction == 'user_login'){
-    $_SESSION = array(); //clear session
-    session_destroy();
-    session_start();
+    //start session if not already started
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
 
     $username = sanitizeString(filter_input(INPUT_POST, 'username'));
     $password = sanitizeString(filter_input(INPUT_POST, 'password'));
     try{
         $isValidUser = UserDb::validateUserLogin($username, $password);
+
         if($isValidUser){
+            //prevent session fixation
+            session_regenerate_id(true); 
+            //get user object
             $user = UserDb::getUserByUsername($username);
+            //set session variables
             $_SESSION['user'] = $user;
-            $message = $user->getFirstName() . ", help us save Earth!";
-            //load data here for next page
-
-
-            //forward to dashboard
-            include('../dashboard_manager/dashboard.php');
+            $_SESSION['user_message'] = $user->getFirstName() . ", help us save Earth!";
+            header('Location: ../dashboard_manager/dashboard.php');
+            exit();
         }else{
-            $errorMessage = "Invalid username or password. Please try again.";
+            //handle error in session
+            $_SESSION['error_message'] = "Invalid username or password. Please try again.";
             //need to send to login page with error*******
             header('Location: ../index.php');
             exit();
@@ -77,15 +81,15 @@ else if($controllerAction == 'user_login'){
         //check if user exists
         $userExists = UserDb::checkForExistingUser($username);
         if($userExists == true){
-            $errorMessage = "User already exists. Please try logging in.";
-            include('register.php');
+            $_SESSION['error_message'] = "User already exists. Please try logging in.";
+            header('Location: register.php');
             exit();
         }
         //validate licensee key
         $isValidLicenseeKey = UserDb::validateLicenseeKey($licenseeKey);
         if($isValidLicenseeKey === false){
-            $errorMessage = "Invalid Licensee Key. Please try again.";
-            include('register.php');
+            $_SESSION['error_message'] = "Invalid Licensee Key. Please try again.";
+            header('Location: register.php');
             exit();
         }
         //set licensee id for insert
@@ -93,18 +97,26 @@ else if($controllerAction == 'user_login'){
         //register user
         $isRegistered = UserDb::registerUser($firstName, $lastName, $email, $username, $password, $role, $licenseeId);
         if($isRegistered){
-            $message = "Registration successful! Please log in.";
-            include('../index.php');
+            $_SESSION['user_message'] = "Registration successful! Please log in.";
+            header('Location: ../index.php');
+            exit();
         }else{
-            $errorMessage = "Registration failed. Please try again.";
-            include('register.php');
+            $_SESSION['error_message'] = "Registration failed. Please try again.";
+            header('Location: register.php');
+            exit();
         }
     } catch (Exception $e) {
-        $error = "Registration failed: " . $e->getMessage();
-        include('../include/error.php');
+        $_SESSION['error_message'] = "Registration failed: " . $e->getMessage();
+        header('Location: ../include/error.php');
         exit();
     }
-} else {
+}else if($controllerAction == 'user_logout'){
+    $_SESSION = array(); //clear session
+    session_destroy();
+    header('Location: ../index.php');
+    exit();
+}
+ else {
     //default action: show login page
     header('Location: ../index.php');
     exit();

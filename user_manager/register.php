@@ -1,5 +1,9 @@
 <?php 
-    $errorMessage = isset($errorMessage) ? $errorMessage : '';
+if(!isset($_SESSION)){
+    session_start();
+}
+    $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+    unset($_SESSION['error_message']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +39,7 @@
                         <input type="password" id="password" name="password" required value="TestPassword">
                         <br>
                         <label for="role">Role:</label>
+
                         <select id="role" name="role" required>
                             <option value="1">User</option>
                             <option value="2">Admin</option>
@@ -46,7 +51,7 @@
                         <button type="submit" id="button_submit">Register</button>
                     </form> 
                     <div>
-                        <span><?php echo $errorMessage ?></span>
+                        <span class="error_message"><?php echo htmlspecialchars($errorMessage); ?></span>
                     </div>
                 </div>
             </div>

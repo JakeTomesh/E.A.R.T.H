@@ -5,7 +5,38 @@
     justify-content: center;
 }
 #form_register{
-    border: 2px solid var(--tertiary-color-1);
+    border: 2px solid var(--primary-color);
     padding: 2em;
     margin-bottom: 2em; 
+    width: 20em;
+}
+label, input{
+    display: block;
+    margin-bottom: .2em;
+    width: 80%;
+}
+#role, #licensee_key{
+    margin-bottom: .2em;
+    width: 80%;
+}
+#licensee_key{
+    width: 110%;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+form label{
+    align-self: flex-start; 
+}
+#button_submit{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    max-width: 5em;
+    width: 100%;
+    text-align: center;
 }
