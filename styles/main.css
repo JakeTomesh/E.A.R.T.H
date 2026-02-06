@@ -17,6 +17,7 @@
     --primary-color: #554348;
     --secondary-color: #2C6E49;
     --tertiary-color-1: #8B4513;
+    --tertiary-color-2: #47B378;
     --background-color: #a0b6c4c0;
     --text-color: #333333;
     --font-primary: 'Slabo', Georgia, serif;
@@ -30,21 +31,23 @@
 }
 html, body{
     height: 100%;
-    width: 100%;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 body{
-    min-width: 100vw;
-    min-height: 100vh;
+    min-height: 100dvh;
+}
+main{
+    flex: 1;
+    min-height: 0;
 }
 #logo{
     position: absolute;
     top: auto;
 }
 .background_img{
-    min-width: 100vw;
-    min-height: 100vh;
+    min-height: 100%;
+    width: 100%;
     background-image: url("../misc/images/landscape_background_steelblue.png");
     background-repeat: no-repeat;
     background-position: center top;
@@ -96,8 +99,7 @@ body{
 }
 #logout{
    position: absolute;
-   right: 0;
-   margin-right: 2em;
+   right: 1rem;
    padding: .1em 1em;
 }
 .btn {
@@ -121,4 +123,9 @@ body{
     margin: 1em;
     text-align: center;
     text-shadow: 1px 1px 5px rgb(97, 97, 97);
+}
+
+/*Media Queries */
+@media (max-width: 800px){
+   
 }

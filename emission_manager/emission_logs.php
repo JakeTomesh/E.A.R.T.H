@@ -25,8 +25,8 @@
                 </div>
             </div>
             <div id="animated_line"></div>
-            <div id="metrics_static_container">
-                <h2>Static Metrics</h2>
+            <div id="emission_logs_container">
+                <h2>Emission Logs</h2>
                 
             </div>
         </div>

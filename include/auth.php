@@ -6,6 +6,6 @@ if (session_status() === PHP_SESSION_NONE) {
 if (!isset($_SESSION['user'])) {
     // optional flash
     $_SESSION['error_message'] = "Please log in to continue.";
-    header('Location: ../index.php'); // adjust path as needed
+    header('Location: ../index.php'); //send to login 
     exit();
 }

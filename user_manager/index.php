@@ -1,13 +1,5 @@
 <?php 
-//set session
-if(session_id() == ''){
-    $lifetime = 60 *60 * 24 * 7; // 1 week
-    session_set_cookie_params($lifetime, '/');
-    session_start();
-}
-//import models
-require_once '../model/User.php';
-require_once '../model/UserDb.php';
+require_once('../include/bootstrap.php');
 
 //string sanitization function
 function sanitizeString(?string $input): string {
@@ -31,6 +23,10 @@ if($controllerAction == 'user_register_nav'){
     include('register.php');
 }else if($controllerAction == 'user_login_nav'){
     include('login.php');
+}else if($controllerAction == 'admin_menu_nav'){
+    include('../user_manager/admin_menu.php');
+}else if($controllerAction == 'alert_logs_nav'){
+    include('../alert_manager/alert_logs.php');
 }
 //-----------USER LOGIN-----------//
 else if($controllerAction == 'user_login'){

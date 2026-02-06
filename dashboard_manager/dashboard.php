@@ -1,5 +1,7 @@
 <?php 
-    require_once '../include/auth.php';
+    require_once '../include/bootstrap.php';
+    require_once '../include/auth.php'; 
+    //get user message    
     $message = isset($_SESSION['user_message']) ? $_SESSION['user_message'] : '';
 ?>
 <!DOCTYPE html>
@@ -8,10 +10,10 @@
     <?php include '../include/head.php'; ?>
     <link rel="stylesheet" href="styles/dashboard.css">
 </head>
-<header>
-    <?php include '../include/header.php'; ?>
-</header>
 <body>
+    <header>
+        <?php include '../include/header.php'; ?>
+    </header>
     <main>
         <div id="container" class="background_img">
             <div id="title_container">
@@ -27,31 +29,36 @@
             </div>
             <div id="animated_line"></div>
             <div id="dashboard_container">
-                <a href="../emission_manager/index.php?controllerRequest=emission_input_nav" id="menu_emission_input" class="dashboard_menu_item">
+                <a href="emission_manager/index.php?controllerRequest=emission_input_nav" id="menu_emission_input" class="dashboard_menu_item">
                     <div  >
                         <h3>Emission Input</h3>
                     </div>
                 </a>
-                <a href="../emission_manager/index.php?controllerRequest=emission_logs_nav" id="menu_emission_logs" class="dashboard_menu_item">
+                <a href="emission_manager/index.php?controllerRequest=emission_logs_nav" id="menu_emission_logs" class="dashboard_menu_item">
                     <div >
                         <h3>Emission Logs</h3>
                     </div>
                 </a>
-                <a href="../alert_manager/index.php?controllerRequest=alert_logs_nav" id="menu_alert_logs" class="dashboard_menu_item">
+                <a href="alert_manager/index.php?controllerRequest=alert_logs_nav" id="menu_alert_logs" class="dashboard_menu_item">
                     <div  >
                         <h3>Alert Logs</h3>
                     </div>
                 </a>
-                <a href="../metrics_manager/index.php?controllerRequest=view_metrics_nav" id="menu_view_metrics" class="dashboard_menu_item">
+                <a href="metrics_manager/index.php?controllerRequest=view_metrics_nav" id="menu_view_metrics" class="dashboard_menu_item">
                     <div  >
                         <h3>View Metrics</h3>
                     </div>
                 </a>
-                <a href="../admin_manager/index.php?controllerRequest=admin_menu_nav" id="menu_admin_portal" class="dashboard_menu_item">
-                    <div >
-                        <h3>Admin Menu</h3>
-                    </div>
-                </a>
+                <?php if(isset($_SESSION['user']) && $_SESSION['user']->getRole() == 2){
+                    //show admin portal link
+                    echo 
+                        '<a href="user_manager/index.php?controllerRequest=admin_menu_nav" id="menu_admin_portal" class="dashboard_menu_item">
+                            <div >
+                                <h3>Admin Menu</h3>
+                            </div>
+                        </a>';
+                }?>
+                
                 <div id="menu_quick_metrics" class="dashboard_menu_item">
                     <div>
                         <h3>Quick Metrics Displayed Here</h3>

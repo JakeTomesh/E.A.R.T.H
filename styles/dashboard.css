@@ -1,9 +1,9 @@
 #dashboard_container{
     display: grid;
-    grid-template: repeat(8, auto) / repeat(12, 1fr);
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(8, minmax(0, 1fr));
     grid-gap: 1.5em;
-    min-height: 100vh;
-    margin-top: 2em;
+    padding-top: 2em;
 }
 #menu_emission_input {
     grid-row: 1/2;
@@ -26,7 +26,7 @@
     grid-column: 7/9;
 }
 #menu_quick_metrics{
-    grid-row: 4/7;
+    grid-row: 4/ -1;
     grid-column: 1/span 12;
 }
 
@@ -66,4 +66,9 @@
     margin-top:1em;
     color: var(--secondary-color);
     
+}
+
+/* Responsive Design */
+#dashboard_container:not(:has(#menu_admin_portal)) #menu_view_metrics{
+    grid-column: 6/8;
 }
