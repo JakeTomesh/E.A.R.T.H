@@ -23,6 +23,7 @@
                         <a href="user_manager/index.php?controllerRequest=user_logout" 
                         id="logout" class="btn">Logout</a>
                     </div>
+                    <h4 id="company_name"><?php echo isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']->getCompanyName()) : ''; ?></h4>
                 </div>
             </div>
             <div id="animated_line"></div>

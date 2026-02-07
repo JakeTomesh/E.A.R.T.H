@@ -20,7 +20,9 @@ class UserDb{
 
     public static function getUserByUsername($username){
         $db = Database::getDB();
-        $query = 'SELECT * FROM EarthUser WHERE username = :username';
+        $query = 'SELECT eu.*, l.company FROM EarthUser eu
+                            JOIN Licensee l ON eu.licensee_id = l.id
+         WHERE username = :username';
         $statement = $db->prepare($query);
         $statement->bindValue(':username', $username);
         $statement->execute();
@@ -39,6 +41,7 @@ class UserDb{
                 $row['date_created'],
                 $row['date_updated']
             );
+            $user->setCompanyName($row['company']);
             return $user;
         } else {
             throw new Exception("User not found.");

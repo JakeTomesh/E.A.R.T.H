@@ -1,7 +1,6 @@
 <?php 
-if(!isset($_SESSION)){
-    session_start();
-}
+include('../include/bootstrap.php');
+include('../include/auth.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

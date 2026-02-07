@@ -1,6 +1,6 @@
 <?php 
 class User{
-    private $id, $licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated, $isActive;
+    private $id, $licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated, $isActive, $companyName;
     
     public function __construct($id,$licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $isActive){
         $this->id = $id;
@@ -50,6 +50,13 @@ class User{
     public function getIsActive(){
         return $this->isActive;
     }
+    public function getCompanyName(){
+        return $this->companyName;
+    }
+    //SETTERS
+    public function setCompanyName($companyName){
+        $this->companyName = $companyName;
+    }   
 }
 
 //end of file
