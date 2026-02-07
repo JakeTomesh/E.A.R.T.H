@@ -40,6 +40,3 @@ label, input{
 .error_message{
     max-width: fit-content;
 }
-.user_message{
-    color: var(--secondary-color);
-}

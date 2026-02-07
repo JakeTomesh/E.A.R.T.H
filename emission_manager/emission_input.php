@@ -28,9 +28,7 @@
             </div>
             <div id="animated_line"></div>
             <div id="emission_input_container">
-                <div id="page_title">
-                    <h2>Emission Input Form</h2>
-                </div>
+                <h2 id="page_title">Emission Input Form</h2>
                 <form action="emission_manager/index.php" method="POST">
                     <input type="hidden" name="controllerRequest" value="submit_emission_input">
                     <div id="fieldset_container">

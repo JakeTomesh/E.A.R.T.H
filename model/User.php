@@ -1,19 +1,20 @@
 <?php 
 class User{
-    private $id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated;
+    private $id, $licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated, $isActive;
     
-    public function __construct($id,$liscenceId, $email, $firstName, $lastName, $passwordHash, $role){
+    public function __construct($id,$licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $isActive){
         $this->id = $id;
-        $this->liscenceId = $liscenceId;
+        $this->licenseeId = $licenseeId;
         $this->email = $email;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->passwordHash = $passwordHash;
         $this->role = $role;
+        $this->isActive = $isActive;
     }
     //OVERLOADED CONSTRUCTORS
-    public static function withDates($id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role, $dateCreated, $dateUpdated){
-        $instance = new self($id, $liscenceId, $email, $firstName, $lastName, $passwordHash, $role);
+    public static function withDates($id, $licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $isActive, $dateCreated, $dateUpdated){
+        $instance = new self($id, $licenseeId, $email, $firstName, $lastName, $passwordHash, $role, $isActive);
         $instance->dateCreated = $dateCreated;
         $instance->dateUpdated = $dateUpdated;
         return $instance;
@@ -22,8 +23,8 @@ class User{
     public function getId(){
         return $this->id;
     }
-    public function getLiscenceId(){
-        return $this->liscenceId;
+    public function getLicenseeId(){
+        return $this->licenseeId;
     }
     public function getEmail(){
         return $this->email;
@@ -46,7 +47,9 @@ class User{
     public function getDateUpdated(){
         return $this->dateUpdated;
     }
-   
+    public function getIsActive(){
+        return $this->isActive;
+    }
 }
 
 //end of file

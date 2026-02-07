@@ -56,8 +56,7 @@
 }
 .dashboard_menu_item div:hover{
     box-shadow: 4px 4px 10px rgb(97, 97, 97);
-    transform: scale(1.05);
-    
+    transform: scale(1.05);  
 }
 .dashboard_menu_item div:visited{
     text-decoration: none;

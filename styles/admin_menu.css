@@ -1,0 +1,78 @@
+
+#admin_menu_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#admin_menu_options{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 1em;
+    margin-top: 2em;
+}
+#admin_menu_options>a:hover{
+    box-shadow: 4px 4px 10px rgb(97, 97, 97);
+    transform: scale(1.05);  
+}
+#admin_menu_options>a{
+    text-decoration: none;
+}
+#admin_menu_options>a:visited{
+    color: black;
+}
+.dashboard_menu_item>div{
+    border: 2px solid var(--primary-color);
+    box-shadow: 2px 2px 5px rgb(97, 97, 97);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+    cursor: pointer;
+    min-height: 5em;
+    min-width: 5em;
+    height: 100%;
+    width: 100%;
+    padding: 1em;
+}
+#admin_user_search_form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2em;
+}
+#admin_user_search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5em;
+}
+#admin_user_search button{
+    padding: .1em 1em;
+    font-family: var(--font-secondary);
+}
+#admin_menu_user_container>table{
+    margin-top: 1em;
+    margin-bottom: 2em;
+    border: 2px solid var(--primary-color);
+}
+#admin_menu_user_container>table th{
+    padding: .5em;
+    text-decoration: underline;
+}
+#admin_menu_user_container>table td{
+    padding: .5em;
+    text-align: center;
+    border: 1px dotted black;
+}
+#search_input{
+    min-width: 15em;
+}
+#edit_user{
+    font-size: 100%;
+    padding: .2rem .5rem;
+}

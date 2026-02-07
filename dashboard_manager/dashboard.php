@@ -1,8 +1,6 @@
 <?php 
     require_once '../include/bootstrap.php';
     require_once '../include/auth.php'; 
-    //get user message    
-    $message = isset($_SESSION['user_message']) ? $_SESSION['user_message'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +19,7 @@
                     <h1>E.A.R.T.H</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
                     <div id="user_div">
-                        <h3 id="title_message"><?php echo htmlspecialchars($message); ?></h3>
+                        <h3 id="title_message"><?php echo isset($_SESSION['user_welcome_message']) ? htmlspecialchars($_SESSION['user_welcome_message']) : ''; ?></h3>
                         <a href="user_manager/index.php?controllerRequest=user_logout" 
                         id="logout" class="btn">Logout</a>
                     </div>

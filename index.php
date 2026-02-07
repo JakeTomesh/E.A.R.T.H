@@ -47,7 +47,6 @@
                     <a href="forgot_password.php">Forgot Password?</a>
                     <a href="register.php">Register a company</a>
                 </div>
-                <a href="user_manager/index.php?controllerRequest=user_register_nav">Register</a>
             </div>
         </div>
     </main>
