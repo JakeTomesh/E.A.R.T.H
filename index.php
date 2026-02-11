@@ -41,11 +41,6 @@
                             echo '<span class="error_message">' . htmlspecialchars($errorMessage) . '</span>';
                         }
                     ?>
-                    
-                </div>
-                <div id="links">
-                    <a href="forgot_password.php">Forgot Password?</a>
-                    <a href="register.php">Register a company</a>
                 </div>
             </div>
         </div>

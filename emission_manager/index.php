@@ -37,8 +37,40 @@ if($controllerAction == 'emission_input_nav'){
     //load emission input page
     include('emission_input.php');
 }else if($controllerAction == 'emission_logs_nav'){
+    //get all emission logs from db
+    try{
+        $userLicenseeId = $_SESSION['user']->getLicenseeId();
+        $emissionLogs = EmissionDb::getAllEmissionLogsByLicensee($userLicenseeId);
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
     include('emission_logs.php');
-}else if($controllerAction == 'manage_thresholds_nav'){
+}else if($controllerAction == 'log_details_nav'){
+    $logId = filter_input(INPUT_POST, 'log_id', FILTER_VALIDATE_INT);
+    if($logId === false || $logId === null){
+        $_SESSION['error_message'] = 'Invalid log ID.';
+        header('Location: index.php?controllerRequest=emission_logs_nav');
+        exit();
+    }
+    try{
+        $logDetails = EmissionDb::getEmissionLogById($logId);
+        if(!$logDetails){
+            $_SESSION['error_message'] = 'Log entry not found.';
+            header('Location: index.php?controllerRequest=emission_logs_nav');
+            exit();
+        }
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+    include('emission_log_details.php');
+}
+else if($controllerAction == 'manage_thresholds_nav'){
     //gather threshold limit data from db
     try{
         $userLicenseeId = $_SESSION['user']->getLicenseeId();

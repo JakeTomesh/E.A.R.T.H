@@ -1,0 +1,87 @@
+<?php 
+    require_once '../include/bootstrap.php';
+    require_once '../include/auth.php'; 
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php include '../include/head.php'; ?>
+    <link rel="stylesheet" href="styles/emission_logs.css">
+</head>
+<body>
+    <header>
+        <?php include '../include/header.php'; ?>
+    </header>
+    <main>
+        <div id="container" class="background_img">
+            <div id="title_container">
+                <div id="title">
+                    <h1>E.A.R.T.H</h1>
+                    <h2>Emission and Resource Tracking Hub</h2>
+                    <div id="user_div">
+                        <a href="emission_manager/index.php?controllerRequest=emission_logs_nav" 
+                        id="back" class="btn">Back to Emission Logs</a>
+                        <a href="../user_manager/index.php?controllerRequest=user_logout" 
+                        id="logout" class="btn">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div id="animated_line"></div>
+            <div id="emission_logs_container">
+                <h2 id="page_title">Emission Logs</h2>
+                <div id="emission_log_details_container">
+                    <dl class="log-details">
+                        <div>
+                            <dt>ID:</dt>
+                            <dd><?= htmlspecialchars($logDetails['id']); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Username:</dt>
+                            <dd><?= htmlspecialchars($logDetails['username']); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Emission Type:</dt>
+                            <dd><?= htmlspecialchars($logDetails['emission_type_name']); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Physical Quantity:</dt>
+                            <dd><?= htmlspecialchars($logDetails['physical_quantity']).' '.htmlspecialchars($logDetails['physical_unit_type_name']); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>CO₂e Quantity:</dt>
+                            <dd><?= htmlspecialchars($logDetails['co2e_quantity']).' '.htmlspecialchars($logDetails['co2e_unit_type_name']); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Emission Factor:</dt>
+                            <dd><?= htmlspecialchars($logDetails['emission_factor']); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Emission Date:</dt>
+                            <dd><?= htmlspecialchars(date('m-d-Y', strtotime($logDetails['emission_date']))); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Log Date:</dt>
+                            <dd><?= htmlspecialchars(date('m-d-Y H:i:s', strtotime($logDetails['date_created']))); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Notes:</dt>
+                            <dd><?= isset($logDetails['notes']) 
+                                ? htmlspecialchars($logDetails['notes']) 
+                                : ''; ?></dd>
+                        </div>
+
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -74,4 +74,58 @@ class EmissionDb{
         return $statement->execute();
     }
 
+    public static function getAllEmissionLogsByLicensee($licenseeId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    el.id,
+                    eu.username,
+                    et.name AS emission_type_name,
+                    ut2.name AS co2e_unit_type_name,
+                    ut.name AS physical_unit_type_name,
+                    el.physical_quantity,
+                    el.co2e_quantity,
+                    ef.factor AS emission_factor,
+                    el.emission_date,
+                    el.date_created
+                FROM EmissionLog el
+                JOIN EmissionType et ON el.emission_type_id = et.id
+                JOIN UnitType ut ON el.unit_type_id = ut.id
+                JOIN UnitType ut2 ON el.co2e_unit_type_id = ut2.id
+                JOIN EarthUser eu ON el.user_id = eu.id
+                JOIN EmissionFactor ef ON el.emission_factor_id = ef.id
+                WHERE el.licensee_id = :licenseeId
+                ORDER BY el.date_created DESC';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public static function getEmissionLogById($logId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    el.id,
+                    eu.username,
+                    et.name AS emission_type_name,
+                    ut2.name AS co2e_unit_type_name,
+                    ut.name AS physical_unit_type_name,
+                    el.physical_quantity,
+                    el.co2e_quantity,
+                    ef.factor AS emission_factor,
+                    el.notes,
+                    el.emission_date,
+                    el.date_created
+                FROM EmissionLog el
+                JOIN EmissionType et ON el.emission_type_id = et.id
+                JOIN UnitType ut ON el.unit_type_id = ut.id
+                JOIN UnitType ut2 ON el.co2e_unit_type_id = ut2.id
+                JOIN EarthUser eu ON el.user_id = eu.id
+                JOIN EmissionFactor ef ON el.emission_factor_id = ef.id
+                WHERE el.id = :logId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':logId', $logId, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
 }
