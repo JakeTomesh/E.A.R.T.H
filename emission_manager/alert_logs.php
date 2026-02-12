@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <?php include '../include/head.php'; ?>
-    <link rel="stylesheet" href="styles/emission_logs.css">
+    <link rel="stylesheet" href="styles/alert_logs.css">
 </head>
 <body>
     <header>
@@ -27,37 +27,36 @@
                 </div>
             </div>
             <div id="animated_line"></div>
-            <div id="emission_logs_container">
-                <h2 id="page_title">Emission Logs</h2>
-                <div id="emission_logs_table_container">
+            <div id="alert_logs_container">
+                <h2 id="page_title">Alert Logs</h2>
+                <div id="alert_logs_table_container">
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>User</th>
+                                <th>Alert ID</th>
+                                <th>Emission Log ID</th>
                                 <th>Emission Type</th>
-                                <th>Physical Quantity</th>
                                 <th>CO2e Quantity</th>
-                                <th>Emission Date</th>
-                                <th>Log Date</th>
+                                <th>CO2e Limit</th>
+                                <th>Alert Date</th>
                                 <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if(!empty($emissionLogs)): ?>
-                                <?php foreach($emissionLogs as $log): ?>
+                            <?php if(!empty($alertLogs)): ?>
+                                <?php foreach($alertLogs as $log): ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($log['id']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['username']); ?></td>
+                                        <td><?php echo htmlspecialchars($log['emission_log_id']); ?></td>
                                         <td><?php echo htmlspecialchars($log['emission_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['physical_quantity']).' '.htmlspecialchars($log['physical_unit_type_name']); ?></td>
                                         <td><?php echo htmlspecialchars($log['co2e_quantity']).' '.htmlspecialchars($log['co2e_unit_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars(date('m-d-Y', strtotime($log['emission_date']))); ?></td>
-                                        <td><?php echo htmlspecialchars(date('m-d-Y H:i:s', strtotime($log['date_created']))); ?></td>
+                                        <td><?php echo htmlspecialchars($log['co2e_limit']).' '.htmlspecialchars($log['co2e_limit_unit_type_name']); ?></td>
+                                        <td><?php echo htmlspecialchars(date('m-d-Y', strtotime($log['date_created']))); ?></td>
                                         <td>
                                             <form action="emission_manager/index.php" method="POST">
-                                                <input type="hidden" name="controllerRequest" value="emission_log_details_nav">
-                                                <input type="hidden" name="log_id" value="<?php echo htmlspecialchars($log['id']); ?>">
+                                                <input type="hidden" name="controllerRequest" value="alert_log_details_nav">
+                                                <input type="hidden" name="alert_log_id" value="<?php echo htmlspecialchars($log['id']); ?>">
+                                                <input type="hidden" name="emission_log_id" value="<?php echo htmlspecialchars($log['emission_log_id']);?>">
                                                 <button type="submit" class="btn" id="btn">View Details</button>
                                             </form>
                                         </td>
@@ -65,7 +64,7 @@
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="10">No emission logs found.</td>
+                                    <td colspan="11">No alert logs found.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>

@@ -1,0 +1,86 @@
+#alert_logs_container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#alert_log_details_wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#alert_logs_table_container>table{
+  margin-top: 1em;
+  margin-bottom: 2em;
+  margin-right: .5em;
+  margin-left: .5em;
+  border: 2px solid var(--primary-color);
+}
+#alert_logs_table_container>table th{
+  padding: .5em;
+  text-decoration: underline;
+}
+#alert_logs_table_container>table td{
+  padding: .5em;
+  text-align: center;
+  border: 1px dotted black;
+}
+#btn{
+  font-size: 100%;
+}
+
+
+/* log details css*/
+/* Card wrapper */
+#alert_log_details_container > dl {
+  border: 2px solid var(--primary-color);
+  padding: 1.5rem;
+  margin: 1rem auto 2rem;
+  max-width: 42rem;
+  width: min(92%, 42rem);
+  background: rgba(255, 255, 255, 0.514); 
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Each term/value row */
+#alert_log_details_container > dl > div {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.5rem 0;
+}
+
+/* Label styling */
+#alert_log_details_container dt {
+  text-align: right;
+  font-weight: 700;
+  opacity: 0.85;
+  width: auto;
+  margin: 0;
+}
+
+/* Value styling */
+#alert_log_details_container dd {
+  margin: 0;
+  text-align: left;
+  font-weight: 500;
+  width: auto;
+  overflow-wrap: anywhere;  
+}
+
+#page_title_second{
+  margin-top: 1em;
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+@media (min-width:1300px) {
+  #alert_logs_container{
+    flex-direction: row;
+  }
+  
+}

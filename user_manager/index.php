@@ -66,11 +66,6 @@ else if($controllerAction == 'alert_logs_nav'){
 }
 //-----------USER LOGIN-----------//
 else if($controllerAction == 'user_login'){
-    //start session if not already started
-    if(session_status() == PHP_SESSION_NONE){
-        session_start();
-    }
-
     $username = sanitizeString(filter_input(INPUT_POST, 'username'));
     $password = sanitizeString(filter_input(INPUT_POST, 'password'));
     try{
@@ -84,11 +79,17 @@ else if($controllerAction == 'user_login'){
             //set session variables
             $_SESSION['user'] = $user;
             $_SESSION['user_welcome_message'] = $user->getFirstName() . ", help us save Earth!";
+
+            // initialize inactivity timer (15-min timeout logic relies on this)
+            $_SESSION['LAST_ACTIVITY'] = time();
+
             header('Location: ../dashboard_manager/dashboard.php');
             exit();
         }else{
             //handle error in session
             $_SESSION['error_message'] = "Invalid username or password. Please try again.";
+            //regenerate session on failed login to mitigate session fixation
+            session_regenerate_id(true); 
             //need to send to login page with error*******
             header('Location: ../index.php');
             exit();

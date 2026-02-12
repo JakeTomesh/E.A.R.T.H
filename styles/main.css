@@ -89,11 +89,12 @@ main{
         transform: scaleX(.7);
     }
 }
-#user_div{
+#user_nav_div{
     display: flex;
     align-items: flex-end;
     width: 100%;
     position: relative;
+    margin-bottom: .1em;
 }
 #title_message{
    margin: 0 auto;
@@ -163,6 +164,9 @@ main{
     flex-direction: column;
 }
 /*Media Queries */
-@media (max-width: 800px){
-   
+@media (max-width: 950px){
+  #user_nav_div{
+    margin-bottom: 0;
+    margin-top:1.5em;
+   }
 }

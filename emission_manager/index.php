@@ -19,6 +19,9 @@ if($controllerAction == NULL){
     }
 }
 //-----------NAVIGATION CONTROLS-----------//
+//*
+//*
+//----------EMISSION INPUT NAV-----------//
 if($controllerAction == 'emission_input_nav'){
     //gather data for emission input page
     //emission types from db
@@ -36,7 +39,8 @@ if($controllerAction == 'emission_input_nav'){
     }
     //load emission input page
     include('emission_input.php');
-}else if($controllerAction == 'emission_logs_nav'){
+}//----------EMISSION LOGS NAV-----------//
+else if($controllerAction == 'emission_logs_nav'){
     //get all emission logs from db
     try{
         $userLicenseeId = $_SESSION['user']->getLicenseeId();
@@ -48,7 +52,8 @@ if($controllerAction == 'emission_input_nav'){
         exit();
     }
     include('emission_logs.php');
-}else if($controllerAction == 'log_details_nav'){
+}//----------EMISSION LOG DETAILS NAV-----------//
+else if($controllerAction == 'emission_log_details_nav'){
     $logId = filter_input(INPUT_POST, 'log_id', FILTER_VALIDATE_INT);
     if($logId === false || $logId === null){
         $_SESSION['error_message'] = 'Invalid log ID.';
@@ -69,8 +74,14 @@ if($controllerAction == 'emission_input_nav'){
         exit();
     }
     include('emission_log_details.php');
-}
+}//----------THRESHOLD MANAGEMENT NAV-----------//
 else if($controllerAction == 'manage_thresholds_nav'){
+    if (!isset($_SESSION['user'])) {
+        // optional flash
+        $_SESSION['error_message'] = "Please log in to continue.";
+        header('Location: ../index.php'); //send to login 
+        exit();
+    }
     //gather threshold limit data from db
     try{
         $userLicenseeId = $_SESSION['user']->getLicenseeId();
@@ -82,7 +93,8 @@ else if($controllerAction == 'manage_thresholds_nav'){
         exit();
     }
     include('emission_thresholds.php');
-}else if($controllerAction == 'edit_threshold_nav'){
+}//----------EDIT THRESHOLD NAV-----------//
+else if($controllerAction == 'edit_threshold_nav'){
     $thresholdId = filter_input(INPUT_GET, 'threshold_id', FILTER_VALIDATE_INT);
     if($thresholdId === false || $thresholdId === null){
         $_SESSION['error_message'] = 'Invalid threshold ID.';
@@ -106,7 +118,46 @@ else if($controllerAction == 'manage_thresholds_nav'){
         exit();
     }
     include('edit_threshold.php');
-}else if($controllerAction == 'save_edit_threshold'){
+}//----------ALERT LOGS NAV-----------//
+else if($controllerAction == 'alert_logs_nav'){
+    //get all alert logs from db
+    try{
+        $userLicenseeId = $_SESSION['user']->getLicenseeId();
+        $alertLogs = EmissionDb::getAllAlertLogsByLicensee($userLicenseeId);
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+    include('alert_logs.php');
+}//----------ALERT LOG DETAILS NAV-----------//
+else if($controllerAction == 'alert_log_details_nav'){
+    $alertLogId = filter_input(INPUT_POST, 'alert_log_id', FILTER_VALIDATE_INT);
+    $emissionLogId = filter_input(INPUT_POST, 'emission_log_id', FILTER_VALIDATE_INT);
+    if($alertLogId === false || $alertLogId === null || $emissionLogId === false || $emissionLogId === null){
+        $_SESSION['error_message'] = 'Invalid log ID.';
+        header('Location: index.php?controllerRequest=alert_logs_nav');
+        exit();
+    }
+    try{
+        $alertLogDetails = EmissionDb::getAlertLogById($alertLogId);
+        $emissionLogDetails = EmissionDb::getEmissionLogById($emissionLogId);
+        if(!$alertLogDetails || !$emissionLogDetails){
+            $_SESSION['error_message'] = 'Log entry not found.';
+            header('Location: index.php?controllerRequest=alert_logs_nav');
+            exit();
+        }
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+    include('alert_log_details.php');
+}
+//----------SAVE EDIT THRESHOLD-----------//
+else if($controllerAction == 'save_edit_threshold'){
     $thresholdId = filter_input(INPUT_POST, 'threshold_id', FILTER_VALIDATE_INT);
     $co2eLimit = filter_input(INPUT_POST, 'co2e_limit', FILTER_VALIDATE_FLOAT);
     if($thresholdId === false || $thresholdId === null){
@@ -130,7 +181,7 @@ else if($controllerAction == 'manage_thresholds_nav'){
         include('../include/error.php');
         exit();
     }
-}
+}//----------DEFAULT - DASHBOARD NAV-----------//
 else{
     //default action - go to dashboard
     header('Location: ../dashboard_manager/index.php?controllerRequest=dashboard_nav');

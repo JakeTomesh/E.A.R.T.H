@@ -69,6 +69,6 @@ form {
 
 @media (max-width:800px){
     #notes_fieldset{
-        grid-column: 4/5;
+        grid-column: 4/-1;
     }
 }

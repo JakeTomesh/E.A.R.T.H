@@ -18,7 +18,7 @@
                 <div id="title">
                     <h1>E.A.R.T.H</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
-                    <div id="user_div">
+                    <div id="user_nav_div">
                         <a href="user_manager/index.php?controllerRequest=user_logout" 
                         id="logout" class="btn">Logout</a>
                     </div>

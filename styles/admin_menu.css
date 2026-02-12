@@ -58,6 +58,8 @@
 #admin_menu_user_container>table{
     margin-top: 1em;
     margin-bottom: 2em;
+    margin-right: .5em;
+    margin-left: .5em;
     border: 2px solid var(--primary-color);
 }
 #admin_menu_user_container>table th{

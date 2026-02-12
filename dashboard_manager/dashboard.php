@@ -18,7 +18,7 @@
                 <div id="title">
                     <h1>E.A.R.T.H</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
-                    <div id="user_div">
+                    <div id="user_nav_div">
                         <h3 id="title_message"><?php echo isset($_SESSION['user_welcome_message']) ? htmlspecialchars($_SESSION['user_welcome_message']) : ''; ?></h3>
                         <a href="user_manager/index.php?controllerRequest=user_logout" 
                         id="logout" class="btn">Logout</a>
@@ -38,7 +38,7 @@
                         <h3>Emission Logs</h3>
                     </div>
                 </a>
-                <a href="alert_manager/index.php?controllerRequest=alert_logs_nav" id="menu_alert_logs" class="dashboard_menu_item">
+                <a href="emission_manager/index.php?controllerRequest=alert_logs_nav" id="menu_alert_logs" class="dashboard_menu_item">
                     <div  >
                         <h3>Alert Logs</h3>
                     </div>

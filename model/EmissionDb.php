@@ -128,4 +128,55 @@ class EmissionDb{
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
+
+    public static function getAllAlertLogsByLicensee($licenseeId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    al.id,
+                    et.name AS emission_type_name,
+                    ut.name AS co2e_unit_type_name,
+                    ut2.name AS co2e_limit_unit_type_name,
+                    al.co2e_quantity,
+                    al.emission_log_id,
+                    tl.co2e_limit,
+                    al.date_created
+                FROM AlertLog al
+                JOIN EmissionType et ON al.emission_type_id = et.id
+                JOIN UnitType ut ON al.co2e_unit_type_id = ut.id
+                JOIN UnitType ut2 ON al.co2e_unit_type_id = ut2.id
+                JOIN EmissionLog el ON al.emission_log_id = el.id
+                JOIN ThresholdLimit tl ON tl.emission_type_id = et.id AND tl.licensee_id = al.licensee_id
+                WHERE al.licensee_id = :licenseeId
+                ORDER BY al.date_created DESC';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public static function getAlertLogById($alertLogId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    al.id,
+                    et.name AS emission_type_name,
+                    ut.name AS co2e_unit_type_name,
+                    ut2.name AS co2e_limit_unit_type_name,
+                    al.co2e_quantity,
+                    al.emission_log_id,
+                    tl.co2e_limit,
+                    al.message,
+                    al.date_created
+                FROM AlertLog al
+                JOIN EmissionType et ON al.emission_type_id = et.id
+                JOIN UnitType ut ON al.co2e_unit_type_id = ut.id
+                JOIN UnitType ut2 ON al.co2e_unit_type_id = ut2.id
+                JOIN EmissionLog el ON al.emission_log_id = el.id
+                JOIN ThresholdLimit tl ON tl.emission_type_id = et.id AND tl.licensee_id = al.licensee_id
+                WHERE al.id = :alertLogId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':alertLogId', $alertLogId, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
 }
