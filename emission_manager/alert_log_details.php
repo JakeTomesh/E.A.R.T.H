@@ -1,6 +1,12 @@
 <?php 
     require_once '../include/bootstrap.php';
     require_once '../include/auth.php'; 
+
+    function formatDate($value, $format = 'm-d-Y') {
+        if (empty($value)) return '—';
+        $ts = strtotime((string)$value);
+        return $ts ? date($format, $ts) : '—';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +28,7 @@
                     <div id="user_nav_div">
                         <a href="emission_manager/index.php?controllerRequest=alert_logs_nav" 
                         id="back" class="btn">Back to Alert Logs</a>
-                        <a href="../user_manager/index.php?controllerRequest=user_logout" 
+                        <a href="user_manager/index.php?controllerRequest=user_logout" 
                         id="logout" class="btn">Logout</a>
                     </div>
                 </div>
@@ -99,8 +105,12 @@
                                 <dd><?= htmlspecialchars($emissionLogDetails['emission_factor']); ?></dd>
                             </div>
                             <div>
-                                <dt>Emission Date:</dt>
-                                <dd><?= htmlspecialchars(date('m-d-Y', strtotime($emissionLogDetails['emission_date']))); ?></dd>
+                                <dt>Emission Start Date:</dt>
+                                <dd><?= htmlspecialchars(formatDate($emissionLogDetails['emission_start_date'], 'm-d-Y')); ?></dd>
+                            </div>
+                            <div>
+                                <dt>Emission End Date:</dt>
+                                <dd><?= htmlspecialchars(formatDate($emissionLogDetails['emission_end_date'], 'm-d-Y')); ?></dd>
                             </div>
                             <div>
                                 <dt>Log Date:</dt>

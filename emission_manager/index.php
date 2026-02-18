@@ -155,6 +155,120 @@ else if($controllerAction == 'alert_log_details_nav'){
         exit();
     }
     include('alert_log_details.php');
+}//----------EMISSION FACTORS MANAGEMENT NAV-----------//
+else if($controllerAction == 'manage_emission_factors_nav'){
+    //get emission factors from db
+    try{
+        $userLicenseeId = $_SESSION['user']->getLicenseeId();
+        $emissionFactors = EmissionDb::getAllEmissionFactorsByLicensee($userLicenseeId);
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+    include('emission_factors.php');
+}//----------EDIT EMISSION FACTOR NAV-----------//
+else if($controllerAction == 'edit_emission_factor_nav'){
+    $emissionFactorId = filter_input(INPUT_GET, 'emission_factor_id', FILTER_VALIDATE_INT);
+    if($emissionFactorId === false || $emissionFactorId === null){
+        $_SESSION['error_message'] = 'Invalid emission factor ID.';
+        header('Location: index.php?controllerRequest=manage_emission_factors_nav');
+        exit();
+    }
+    //get emission factor details from db
+    try{
+        $emissionFactorToEdit = EmissionDb::getEmissionFactorById($emissionFactorId);
+        if(!$emissionFactorToEdit){
+            $_SESSION['error_message'] = 'Emission factor not found.';
+            header('Location: index.php?controllerRequest=manage_emission_factors_nav');
+            exit();
+        }
+        $emissionTypes = EmissionDb::getEmissionTypes();
+        $unitTypes = EmissionDb::getUnitTypes();
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+    include('edit_emission_factor.php');
+}//----------ADD EMISSION FACTOR NAV-----------//
+else if($controllerAction == 'add_emission_factor_nav'){
+    //get emission types and unit types for add form
+    try{
+        $emissionTypes = EmissionDb::getEmissionTypes();
+        $unitTypes = EmissionDb::getUnitTypes();
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+    include('add_emission_factor.php');
+}
+//-----------FUNCTIONAL CONTROLS-----------//
+//*
+//*
+//----------SAVE ADD EMISSION FACTOR-----------//
+else if($controllerAction == 'save_add_emission_factor'){
+    $emissionTypeId = filter_input(INPUT_POST, 'emission_type', FILTER_VALIDATE_INT);
+    $unitTypeId = filter_input(INPUT_POST, 'emission_unit_type', FILTER_VALIDATE_INT);
+    $factor = filter_input(INPUT_POST, 'emission_factor', FILTER_VALIDATE_FLOAT);
+    $licenseeId = $_SESSION['user']->getLicenseeId();
+    if($emissionTypeId === false || $emissionTypeId === null){
+        $_SESSION['error_message'] = 'Invalid emission type selection.';
+        header('Location: index.php?controllerRequest=add_emission_factor_nav');
+        exit();
+    }
+    if($unitTypeId === false || $unitTypeId === null){
+        $_SESSION['error_message'] = 'Invalid unit type selection.';
+        header('Location: index.php?controllerRequest=add_emission_factor_nav');
+        exit();
+    }
+    if($factor === false || $factor < 0){
+        $_SESSION['error_message'] = 'Invalid emission factor. Must be a non-negative number.';
+        header('Location: index.php?controllerRequest=add_emission_factor_nav');
+        exit();
+    }
+    try{
+        $licenseeId = $_SESSION['user']->getLicenseeId();
+        EmissionDb::addEmissionFactor($licenseeId, $emissionTypeId, $unitTypeId, $factor);
+        $_SESSION['user_message'] = 'Emission factor added successfully.';
+        header('Location: index.php?controllerRequest=manage_emission_factors_nav');
+        exit();
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+}
+//----------SAVE EDIT EMISSION FACTOR-----------//
+else if($controllerAction == 'save_edit_emission_factor'){
+    $emissionFactorId = filter_input(INPUT_POST, 'emission_factor_id', FILTER_VALIDATE_INT);
+    $factor = filter_input(INPUT_POST, 'emission_factor', FILTER_VALIDATE_FLOAT);
+    if($emissionFactorId === false || $emissionFactorId === null){
+        $_SESSION['error_message'] = 'Invalid emission factor ID.';
+        header('Location: index.php?controllerRequest=manage_emission_factors_nav');
+        exit();
+    }
+    if($factor === false || $factor < 0){
+        $_SESSION['error_message'] = 'Invalid emission factor. Must be a non-negative number.';
+        header('Location: index.php?controllerRequest=edit_emission_factor_nav&emission_factor_id=' . $emissionFactorId);
+        exit();
+    }
+    try{
+        EmissionDb::updateEmissionFactor($emissionFactorId, $factor);
+        $_SESSION['user_message'] = 'Emission factor updated successfully.';
+        header('Location: index.php?controllerRequest=manage_emission_factors_nav');
+        exit();
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
 }
 //----------SAVE EDIT THRESHOLD-----------//
 else if($controllerAction == 'save_edit_threshold'){
@@ -181,7 +295,91 @@ else if($controllerAction == 'save_edit_threshold'){
         include('../include/error.php');
         exit();
     }
-}//----------DEFAULT - DASHBOARD NAV-----------//
+}else if($controllerAction == 'submit_emission_input'){
+    //filter input
+    $emissionTypeId = filter_input(INPUT_POST, 'emission_type', FILTER_VALIDATE_INT);
+    $unitTypeId = filter_input(INPUT_POST, 'unit_type', FILTER_VALIDATE_INT);
+    $unitQuantity = filter_input(INPUT_POST, 'unit_quantity', FILTER_VALIDATE_FLOAT);
+    $emissionStartDate = filter_input(INPUT_POST, 'emission_start_date');
+    $emissionEndDate = filter_input(INPUT_POST, 'emission_end_date');
+    $notes = sanitizeString(filter_input(INPUT_POST, 'notes'));
+    $licenseeId = $_SESSION['user']->getLicenseeId();
+    $userId = $_SESSION['user']->getId();
+
+    //validate input
+    if($emissionTypeId === false || $emissionTypeId === null){
+        $_SESSION['error_message'] = 'Invalid emission type selection.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if($unitTypeId === false || $unitTypeId === null){
+        $_SESSION['error_message'] = 'Invalid unit type selection.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if($unitQuantity === false || $unitQuantity < 0){
+        $_SESSION['error_message'] = 'Invalid unit quantity. Must be a non-negative number.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if($emissionStartDate === false || $emissionStartDate === null || $emissionEndDate === false || $emissionEndDate === null){
+        $_SESSION['error_message'] = 'Invalid emission date(s). Please provide valid start and end dates.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if($emissionStartDate > date('Y-m-d') || $emissionEndDate > date('Y-m-d')){
+        $_SESSION['error_message'] = 'Emission dates cannot be in the future.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if($emissionEndDate < $emissionStartDate){
+        $_SESSION['error_message'] = 'Emission end date cannot be before start date.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+
+    //calculate co2e quantity based on emission factor for the selected type/unit
+    $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($emissionTypeId, $unitTypeId);
+    $co2eQuantity = $unitQuantity * $emissionFactor;
+
+    //save to db
+    try{
+        $licenseeId = $_SESSION['user']->getLicenseeId();
+        //return new emission ID
+        $newEmissionId = EmissionDb::addEmissionLog($userId, $licenseeId, $emissionTypeId, $unitTypeId, $unitQuantity, $emissionStartDate, $emissionEndDate, $notes, $co2eQuantity, $emissionFactor, $licenseeId);
+
+        $_SESSION['user_message'] = 'Emission log added successfully.';
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        include('../include/error.php');
+        exit();
+    }
+
+    //emission input is successful
+    //now check if this log entry exceeds any thresholds and if so, create alert log entry
+    //must compare thresholds by unit type, so get threshold limits for this emission's unit type
+    $threshold = EmissionDb::getThresholdLimitByUnitType($unitTypeId, $licenseeId);
+    //compare co2e quantity to threshold limit
+    if($threshold && $co2eQuantity > $threshold){
+        //exceeds threshold, create alert log entry
+        try{
+            EmissionDb::addAlertLog($newEmissionId, $licenseeId, $co2eQuantity);
+        }catch(Exception $e){
+            $error_message = $e->getMessage();
+            $_SESSION['error_message'] = $error_message;
+            include('../include/error.php');
+            exit();
+        }
+    }
+
+     
+}
+        
+
+//----------DEFAULT - DASHBOARD NAV-----------//
+//**
+//**  
 else{
     //default action - go to dashboard
     header('Location: ../dashboard_manager/index.php?controllerRequest=dashboard_nav');

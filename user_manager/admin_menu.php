@@ -49,6 +49,11 @@
                             <h3>Manage Thresholds</h3>
                         </div>
                     </a>
+                    <a href="emission_manager/index.php?controllerRequest=manage_emission_factors_nav" class="dashboard_menu_item">
+                        <div>
+                            <h3>Manage Emission Factors</h3>
+                        </div>
+                    </a>
                 </div>
                 <div id="admin_menu_user_container">
                     <form action="user_manager/index.php" method="POST" id="admin_user_search_form">

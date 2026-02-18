@@ -52,6 +52,13 @@ fieldset legend{
     padding: .2em;
     border: 2px solid black;
 }
+#datetime_fieldset div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 1em;
+}
 form {
     display: flex;
     flex-direction: column;

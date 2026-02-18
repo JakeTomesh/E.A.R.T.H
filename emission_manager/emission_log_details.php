@@ -1,6 +1,12 @@
 <?php 
     require_once '../include/bootstrap.php';
     require_once '../include/auth.php'; 
+
+    function formatDate($value, $format = 'm-d-Y') {
+        if (empty($value)) return '—';
+        $ts = strtotime((string)$value);
+        return $ts ? date($format, $ts) : '—';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,8 +68,13 @@
                         </div>
 
                         <div>
-                            <dt>Emission Date:</dt>
-                            <dd><?= htmlspecialchars(date('m-d-Y', strtotime($logDetails['emission_date']))); ?></dd>
+                            <dt>Emission Start Date:</dt>
+                            <dd><?= htmlspecialchars(formatDate($logDetails['emission_start_date'], 'm-d-Y')); ?></dd>
+                        </div>
+
+                        <div>
+                            <dt>Emission End Date:</dt>
+                            <dd><?= htmlspecialchars(formatDate($logDetails['emission_end_date'], 'm-d-Y')); ?></dd>
                         </div>
 
                         <div>

@@ -42,3 +42,9 @@ form label{
     text-align: center;
 }
 
+/* Specific style for Emission Factor form */
+#emission_unit_type, #emission_type{
+    width: 80%;
+    margin-bottom: .2em;
+}
+

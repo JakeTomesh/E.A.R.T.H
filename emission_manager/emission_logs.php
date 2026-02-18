@@ -1,6 +1,13 @@
 <?php 
     require_once '../include/bootstrap.php';
     require_once '../include/auth.php'; 
+
+    function formatDate($value, $format = 'm-d-Y') {
+        if (empty($value)) return '—';
+        $ts = strtotime((string)$value);
+        return $ts ? date($format, $ts) : '—';
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +45,8 @@
                                 <th>Emission Type</th>
                                 <th>Physical Quantity</th>
                                 <th>CO2e Quantity</th>
-                                <th>Emission Date</th>
+                                <th>Emission Start Date</th>
+                                <th>Emission End Date</th>
                                 <th>Log Date</th>
                                 <th>Details</th>
                             </tr>
@@ -52,7 +60,9 @@
                                         <td><?php echo htmlspecialchars($log['emission_type_name']); ?></td>
                                         <td><?php echo htmlspecialchars($log['physical_quantity']).' '.htmlspecialchars($log['physical_unit_type_name']); ?></td>
                                         <td><?php echo htmlspecialchars($log['co2e_quantity']).' '.htmlspecialchars($log['co2e_unit_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars(date('m-d-Y', strtotime($log['emission_date']))); ?></td>
+                                        <td><?php echo htmlspecialchars(formatDate($log['emission_start_date'], 'm-d-Y')); ?></td>
+                                        <td><?php echo htmlspecialchars(formatDate($log['emission_end_date'], 'm-d-Y')); ?></td>
+
                                         <td><?php echo htmlspecialchars(date('m-d-Y H:i:s', strtotime($log['date_created']))); ?></td>
                                         <td>
                                             <form action="emission_manager/index.php" method="POST">

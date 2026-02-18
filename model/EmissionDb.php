@@ -85,7 +85,8 @@ class EmissionDb{
                     el.physical_quantity,
                     el.co2e_quantity,
                     ef.factor AS emission_factor,
-                    el.emission_date,
+                    el.emission_start_date,
+                    el.emission_end_date,
                     el.date_created
                 FROM EmissionLog el
                 JOIN EmissionType et ON el.emission_type_id = et.id
@@ -114,7 +115,8 @@ class EmissionDb{
                     el.co2e_quantity,
                     ef.factor AS emission_factor,
                     el.notes,
-                    el.emission_date,
+                    el.emission_start_date,
+                    el.emission_end_date,
                     el.date_created
                 FROM EmissionLog el
                 JOIN EmissionType et ON el.emission_type_id = et.id
@@ -178,5 +180,68 @@ class EmissionDb{
         $statement->bindValue(':alertLogId', $alertLogId, PDO::PARAM_INT);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function getAllEmissionFactorsByLicensee($licenseeId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    ef.id,
+                    et.name AS emission_type_name,
+                    ut.name AS unit_type_name,
+                    ut2.name AS co2e_unit_type_name,
+                    ef.factor,
+                    ef.date_updated
+                FROM EmissionFactor ef
+                JOIN EmissionType et ON ef.emission_type_id = et.id
+                JOIN UnitType ut ON ef.physical_unit_type_id = ut.id
+                JOIN UnitType ut2 ON ef.co2e_unit_type_id = ut2.id
+                WHERE ef.licensee_id = :licenseeId
+                ORDER BY ef.id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public static function getEmissionFactorById($emissionFactorId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    ef.id,
+                    et.name AS emission_type_name,
+                    ut.name AS unit_type_name,
+                    ut2.name AS co2e_unit_type_name,
+                    ef.factor,
+                    ef.date_updated
+                FROM EmissionFactor ef
+                JOIN EmissionType et ON ef.emission_type_id = et.id
+                JOIN UnitType ut ON ef.physical_unit_type_id = ut.id
+                JOIN UnitType ut2 ON ef.co2e_unit_type_id = ut2.id
+                WHERE ef.id = :emissionFactorId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':emissionFactorId', $emissionFactorId, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function updateEmissionFactor($emissionFactorId, $newFactor){
+        $db = Database::getDB();
+        $query = 'UPDATE EmissionFactor SET factor = :factor, date_updated = NOW() WHERE id = :emissionFactorId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':factor', $newFactor);
+        $statement->bindValue(':emissionFactorId', $emissionFactorId, PDO::PARAM_INT);
+        return $statement->execute();
+    }
+
+    public static function addEmissionFactor($licenseeId, $emissionTypeId, $physicalUnitTypeId, $factor){
+        $db = Database::getDB();
+        $query = 'INSERT INTO EmissionFactor (licensee_id, emission_type_id, physical_unit_type_id, factor, date_updated)
+                  VALUES (:licenseeId, :emissionTypeId, :physicalUnitTypeId, :factor, NOW())';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->bindValue(':emissionTypeId', $emissionTypeId, PDO::PARAM_INT);
+        $statement->bindValue(':physicalUnitTypeId', $physicalUnitTypeId, PDO::PARAM_INT);
+        $statement->bindValue(':factor', $factor);
+        return $statement->execute();
     }
 }

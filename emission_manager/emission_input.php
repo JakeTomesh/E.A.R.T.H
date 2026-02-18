@@ -58,8 +58,15 @@
                             </select>
                         </fieldset>
                         <fieldset id="datetime_fieldset">
-                            <legend>Record Date/Time:</legend>
-                            <input class="input" id="datepicker" type="date" name="record_datetime" max="<?= date('Y-m-d') ?>" required>
+                            <legend>Emission Date - Start/End:</legend>
+                            <div>
+                                <label for="emission_start_date">Start:</label>
+                                <input class="input" id="start_datepicker" type="date" name="emission_start_date" max="<?= date('Y-m-d') ?>" required>
+                            </div>
+                            <div>
+                                <label for="emission_end_date">End:</label>
+                                <input class="input" id="end_datepicker" type="date" name="emission_end_date" max="<?= date('Y-m-d') ?>" required>
+                            </div>
                         </fieldset>
                         <fieldset id="notes_fieldset">
                             <legend>Notes:</legend>

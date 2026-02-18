@@ -41,9 +41,31 @@
                             echo '<span class="error_message">' . htmlspecialchars($errorMessage) . '</span>';
                         }
                     ?>
+                    
+                </div>
+                <div>
+                    <button type="button" id="admin_login_button">Login Admin</button>
+                    <button type="button" id="user_login_button">Login User</button>
                 </div>
             </div>
+            
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', ()=>{
+            const adminLoginButton = document.getElementById('admin_login_button');
+            const userLoginButton = document.getElementById('user_login_button');
+
+            adminLoginButton.addEventListener('click', () => {
+                document.getElementById('username').value = 'JTomesh';
+                document.getElementById('password').value = 'TestPassword';
+            });
+
+            userLoginButton.addEventListener('click', () => {
+                document.getElementById('username').value = 'JDoe';
+                document.getElementById('password').value = 'TestPassword';
+            });
+        })
+    </script>
 </body>
 </html>
