@@ -189,6 +189,42 @@ class UserDb{
         return $result;
     }
 
+    public static function updateUserWithPassword($userId, $firstName, $lastName, $email, $role, $isActive, $passwordHash){
+        $db = Database::getDB();
+        $query = 'UPDATE EarthUser SET first_name = :first_name,
+                                        last_name = :last_name,
+                                        email = :email,
+                                        role_type_id = :role_type_id,
+                                        is_active = :is_active,
+                                        password_hash = :password_hash,
+                                        date_updated = NOW() WHERE id = :id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':first_name', $firstName);
+        $statement->bindValue(':last_name', $lastName);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':role_type_id', $role);
+        $statement->bindValue(':is_active', $isActive);
+        $statement->bindValue(':password_hash', $passwordHash);
+        $statement->bindValue(':id', $userId);
+        try {
+            $statement->execute();
+        } catch (PDOException $e) {
+            throw new Exception(
+                "Update with password failed. userId={$userId},
+                                firstName={$firstName},
+                                lastName={$lastName},
+                                role_type_id={$role},
+                                is_active={$isActive},
+                                 " . $e->getMessage()
+            );
+        }
+        //$statement->execute();
+        $rowsUpdated = $statement->rowCount();
+        $result = ($rowsUpdated > 0);
+        $statement->closeCursor();
+        return $result;
+    }
+
     public static function searchUsersByNameOrEmail($searchTerm, $licenseeId){
         $db = Database::getDB();
         $query = 'SELECT * FROM EarthUser WHERE (first_name LIKE :search OR last_name LIKE :search OR email LIKE :search) AND licensee_id = :licensee_id';

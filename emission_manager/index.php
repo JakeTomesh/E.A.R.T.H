@@ -295,7 +295,8 @@ else if($controllerAction == 'save_edit_threshold'){
         include('../include/error.php');
         exit();
     }
-}else if($controllerAction == 'submit_emission_input'){
+}//----------SUBMIT EMISSION INPUT-----------//
+else if($controllerAction == 'submit_emission_input'){
     //filter input
     $emissionTypeId = filter_input(INPUT_POST, 'emission_type', FILTER_VALIDATE_INT);
     $unitTypeId = filter_input(INPUT_POST, 'unit_type', FILTER_VALIDATE_INT);
@@ -339,15 +340,40 @@ else if($controllerAction == 'save_edit_threshold'){
     }
 
     //calculate co2e quantity based on emission factor for the selected type/unit
-    $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($emissionTypeId, $unitTypeId);
-    $co2eQuantity = $unitQuantity * $emissionFactor;
+    $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($licenseeId, $emissionTypeId, $unitTypeId);
+
+    if ($emissionFactor === false || $emissionFactor === null) {
+        $_SESSION['error_message'] = 'No emission factor found for the selected emission type and unit.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if (!isset($emissionFactor['factor']) || !is_numeric($emissionFactor['factor'])) {
+        $_SESSION['error_message'] = 'Emission factor data is invalid (missing factor).';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    //cast factor to float for calculation
+    $factor = (float)$emissionFactor['factor'];
+
+    if ($factor <= 0) {
+        $_SESSION['error_message'] = 'Emission factor must be greater than 0 for this unit/type.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    //convert to co2e quantity and round to 2 decimal places
+    $co2eQuantity = round(((float)$unitQuantity) * $factor, 2);
+
+    if (!is_finite($co2eQuantity) || $co2eQuantity < 0) {
+        $_SESSION['error_message'] = 'Calculated CO₂e value is invalid.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
 
     //save to db
     try{
         $licenseeId = $_SESSION['user']->getLicenseeId();
         //return new emission ID
-        $newEmissionId = EmissionDb::addEmissionLog($userId, $licenseeId, $emissionTypeId, $unitTypeId, $unitQuantity, $emissionStartDate, $emissionEndDate, $notes, $co2eQuantity, $emissionFactor, $licenseeId);
-
+        $newEmissionId = EmissionDb::addEmissionLog($licenseeId, $userId, $emissionTypeId, $unitTypeId, $unitQuantity,  $co2eQuantity, $emissionFactor, $notes, $emissionStartDate, $emissionEndDate);
         $_SESSION['user_message'] = 'Emission log added successfully.';
     }catch(Exception $e){
         $error_message = $e->getMessage();
@@ -355,26 +381,96 @@ else if($controllerAction == 'save_edit_threshold'){
         include('../include/error.php');
         exit();
     }
-
+    if(!$newEmissionId || $newEmissionId <= 0){
+        $_SESSION['error_message'] = 'Failed to save emission log. Please try again.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
     //emission input is successful
     //now check if this log entry exceeds any thresholds and if so, create alert log entry
     //must compare thresholds by unit type, so get threshold limits for this emission's unit type
-    $threshold = EmissionDb::getThresholdLimitByUnitType($unitTypeId, $licenseeId);
-    //compare co2e quantity to threshold limit
-    if($threshold && $co2eQuantity > $threshold){
-        //exceeds threshold, create alert log entry
-        try{
-            EmissionDb::addAlertLog($newEmissionId, $licenseeId, $co2eQuantity);
-        }catch(Exception $e){
-            $error_message = $e->getMessage();
-            $_SESSION['error_message'] = $error_message;
-            include('../include/error.php');
+    $threshold = EmissionDb::getThresholdLimitByEmissionType($licenseeId, $emissionTypeId);
+
+
+    if ($threshold !== null) {
+        if (!isset($threshold['co2e_limit']) || !is_numeric($threshold['co2e_limit'])) {
+            $_SESSION['error_message'] = 'Threshold data is invalid (missing CO₂e limit).';
+            header('Location: index.php?controllerRequest=emission_input_nav');
             exit();
         }
     }
 
-    //Continue emission conversion logic. This comment is for asg5 purposes. 
-     
+
+
+    if ($threshold !== null) {
+        $limit = (float)$threshold['co2e_limit'];
+        //compare co2e quantity to threshold limit
+        if($co2eQuantity > $limit){
+            //exceeds threshold, create alert log entry
+            try{
+                //switch statment for alert message based on emission type
+                
+                switch($emissionTypeId){
+                    case 1: //Electricity - Grid
+                        $emissionTypeMessage = 'Electricity consumption from grid exceeds threshold.';
+                        break;
+                    case 2: //Electricity - Renewable
+                        $emissionTypeMessage = 'Electricity consumption from renewable sources exceeds threshold.';
+                        break;
+                    case 3: //Natural Gas - On-site Combustion
+                        $emissionTypeMessage = 'Natural gas usage exceeds threshold.';
+                        break;
+                    case 4: //Diesel Fuel - Backup Generators
+                        $emissionTypeMessage = 'Diesel fuel usage exceeds threshold.';
+                        break;
+                    case 5: //Refrigerant Leakage - Cooling Systems
+                        $emissionTypeMessage = 'Refrigerant leakage from cooling systems exceeds threshold.';
+                        break;
+                    case 6: //Water Usage - Cooling Systems
+                        $emissionTypeMessage = 'Water usage from cooling systems exceeds threshold.';
+                        break;
+                    case 7: //Waste - Electronic (E-waste)
+                        $emissionTypeMessage = 'Electronic waste generation exceeds threshold.';
+                        break;
+                    case 8: //Waste - General/Landfilled
+                        $emissionTypeMessage = 'General waste generation exceeds threshold.';
+                        break;
+                    default:
+                        $emissionTypeMessage = 'An emission entry exceeds threshold.';
+                }
+                $isvalidAlertLog = EmissionDb::addAlertLog($licenseeId, $newEmissionId, $emissionTypeId, $co2eQuantity, $threshold['id'], $emissionTypeMessage);
+            }catch(Exception $e){
+                $error_message = $e->getMessage();
+                $_SESSION['error_message'] = $error_message;
+                include('../include/error.php');
+                exit();
+            }
+        }
+        if(!isset($isvalidAlertLog)){
+            //no alert triggered, so this variable is not set. Set to null to avoid null errors
+            $isvalidAlertLog = null; 
+        }
+        //check if alert was triggered, set message.
+        if($isvalidAlertLog === false){
+            $_SESSION['error_message'] = 'Failed to create alert log entry for threshold exceedance. Please check your alert logs to confirm if an alert was created.';
+            header('Location: index.php?controllerRequest=emission_input_nav');
+            exit();
+        }else if($isvalidAlertLog === true){
+            $_SESSION['alert_message'] = ' Alert log created for threshold exceedance.';
+        }
+    }
+    
+
+    
+
+    //display pop up message to user via 'show_popup'. If alert was triggered, include that message in pop up as well.
+    if($newEmissionId > 0 && $newEmissionId !== false ){
+        $_SESSION['input_message'] = 'Emission log added successfully.';
+        //create flag to trigger pop up in view
+        $_SESSION['show_popup'] = true;
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
 }
         
 

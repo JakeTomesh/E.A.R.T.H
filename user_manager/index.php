@@ -158,6 +158,8 @@ else if($controllerAction == 'save_edit_user'){
     $email = trim(sanitizeString(filter_input(INPUT_POST, 'email')));
     $role = filter_input(INPUT_POST, 'role', FILTER_VALIDATE_INT);
     $isActive = filter_input(INPUT_POST, 'is_active', FILTER_VALIDATE_INT);
+    $resetPassword = trim(sanitizeString(filter_input(INPUT_POST, 'reset_password')));
+    $confirmPassword = trim(sanitizeString(filter_input(INPUT_POST, 'confirm_password')));
 
     if (!$userId) {
         $_SESSION['error_message'] = "Invalid user id.";
@@ -165,7 +167,20 @@ else if($controllerAction == 'save_edit_user'){
         exit();
     }
     try{
-        $isUpdated = UserDb::updateUser($userId, $firstName, $lastName, $email, $role, $isActive);
+        if($resetPassword !== '' || $confirmPassword !== ''){
+            if($resetPassword !== $confirmPassword){
+                $_SESSION['edit_error_message'] = "Passwords do not match.";
+                header('Location: index.php?controllerRequest=edit_user_nav&user_id=' . urlencode($userId));
+                exit();
+            }
+            //hash new password
+            $hashedPassword = password_hash($resetPassword, PASSWORD_BCRYPT);
+            //update user with new password
+            $isUpdated = UserDb::updateUserWithPassword($userId, $firstName, $lastName, $email, $role, $isActive, $hashedPassword);
+        }else{
+            //update user without changing password
+            $isUpdated = UserDb::updateUser($userId, $firstName, $lastName, $email, $role, $isActive);
+        }
         if($isUpdated){
             $_SESSION['user_message'] = "User updated successfully.";
             header('Location: index.php?controllerRequest=admin_menu_nav');

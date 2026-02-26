@@ -244,4 +244,69 @@ class EmissionDb{
         $statement->bindValue(':factor', $factor);
         return $statement->execute();
     }
+
+    public static function getEmissionFactorBasedOnUnitType($licenseeId, $emissionTypeId, $physicalUnitTypeId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    ef.id,
+                    ef.factor
+                FROM EmissionFactor ef
+                WHERE ef.licensee_id = :licenseeId AND ef.emission_type_id = :emissionTypeId AND ef.physical_unit_type_id = :physicalUnitTypeId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->bindValue(':emissionTypeId', $emissionTypeId, PDO::PARAM_INT);
+        $statement->bindValue(':physicalUnitTypeId', $physicalUnitTypeId, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function getThresholdLimitByEmissionType($licenseeId, $emissionTypeId){
+        $db = Database::getDB();
+        $query = 'SELECT
+                    tl.id,
+                    tl.co2e_limit
+                FROM ThresholdLimit tl
+                WHERE tl.licensee_id = :licenseeId AND tl.emission_type_id = :emissionTypeId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->bindValue(':emissionTypeId', $emissionTypeId, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function addAlertLog($licenseeId, $newEmissionId, $emissionTypeId, $co2eQuantity, $thresholdId, $emissionMessage){
+        $db = Database::getDB();
+        $query = 'INSERT INTO AlertLog (licensee_id, emission_log_id, emission_type_id, co2e_quantity, threshold_limit_id, message, date_created)
+                  VALUES (:licenseeId, :emissionLogId, :emissionTypeId, :co2eQuantity, :thresholdId, :message, NOW())';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->bindValue(':emissionLogId', $newEmissionId, PDO::PARAM_INT);
+        $statement->bindValue(':emissionTypeId', $emissionTypeId, PDO::PARAM_INT);
+        $statement->bindValue(':co2eQuantity', $co2eQuantity);
+        $statement->bindValue(':thresholdId', $thresholdId, PDO::PARAM_INT);
+        $statement->bindValue(':message', $emissionMessage);
+        return $statement->execute();
+    }
+
+    public static function addEmissionLog($licenseeId, $userId, $emissionTypeId, $unitTypeId, $physicalQuantity, $co2eQuantity, $emissionFactorId, $notes, $emissionStartDate, $emissionEndDate){
+        $db = Database::getDB();
+        $query = 'INSERT INTO EmissionLog (licensee_id, user_id, emission_type_id, unit_type_id, physical_quantity, co2e_quantity, emission_factor_id, notes, emission_start_date, emission_end_date, date_created)
+                  VALUES (:licenseeId, :userId, :emissionTypeId, :unitTypeId, :physicalQuantity, :co2eQuantity, :emissionFactorId, :notes, :emissionStartDate, :emissionEndDate, NOW())';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
+        $statement->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $statement->bindValue(':emissionTypeId', $emissionTypeId, PDO::PARAM_INT);
+        $statement->bindValue(':unitTypeId', $unitTypeId, PDO::PARAM_INT);
+        $statement->bindValue(':physicalQuantity', $physicalQuantity);
+        $statement->bindValue(':co2eQuantity', $co2eQuantity);
+        $statement->bindValue(':emissionFactorId', $emissionFactorId, PDO::PARAM_INT);
+        $statement->bindValue(':notes', $notes);
+        $statement->bindValue(':emissionStartDate', $emissionStartDate);
+        $statement->bindValue(':emissionEndDate', $emissionEndDate);
+        if($statement->execute()){
+            return $db->lastInsertId();
+        }else{
+            return false;
+        }
+    }
 }
