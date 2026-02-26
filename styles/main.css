@@ -163,6 +163,17 @@ main{
     justify-content: center;
     flex-direction: column;
 }
+#show_hide_pass{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 3em;
+    font-size: 80%;
+    min-width: 90%;
+}
+#toggle_password{
+    width: 10%;
+}
 /*Media Queries */
 @media (max-width: 950px){
   #user_nav_div{

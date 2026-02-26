@@ -28,13 +28,33 @@
             </div>
             <div id="animated_line"></div>
             <div id="emission_input_container">
+                <?php
+                    //display any error messages from previous submission attempt
+                    if(isset($_SESSION['error_message'])){
+                        echo '<span id="error_message">' . htmlspecialchars($_SESSION['error_message']) . '</span>';
+                        unset($_SESSION['error_message']);
+                    }
+                    //display pop up alert with input message and alert message if triggered
+                    if(isset($_SESSION['show_popup']) && $_SESSION['show_popup']){
+                        if (isset($_SESSION['alert_message'])) {
+                            $message = $_SESSION['alert_message'] . ' ' . $_SESSION['input_message'];
+                            echo '<script>alert(' . json_encode($message) . ');</script>';
+                        } else {
+                            echo '<script>alert(' . json_encode($_SESSION['input_message']) . ');</script>';
+                        }
+                        unset($_SESSION['show_popup']);
+                        $_SESSION['show_popup'] = false;
+                        unset($_SESSION['alert_message']);
+                        unset($_SESSION['input_message']);
+                    }
+                ?>
                 <h2 id="page_title">Emission Input Form</h2>
                 <form action="emission_manager/index.php" method="POST">
                     <input type="hidden" name="controllerRequest" value="submit_emission_input">
                     <div id="fieldset_container">
                         <fieldset id="emission_type_fieldset">
                             <legend>Emission Type:</legend>
-                            <select class="input">
+                            <select class="input" name="emission_type">
                                 <option value="" selected disabled hidden> - Select an Emission Type - </option>
                                 <?php foreach($emissionTypes as $emissionType): ?>
                                     <option value="<?php echo htmlspecialchars($emissionType['id']); ?>">
@@ -48,7 +68,7 @@
                             <div id="unit_quantity">
                                 <input class="input" type="number"  name="unit_quantity" min="0" placeholder="00.00" required>
                             </div>
-                            <select class="input">
+                            <select class="input" name="unit_type">
                                 <option value="" selected disabled hidden> - Select a Unit Type - </option>
                                 <?php foreach($unitTypes as $unitType): ?>
                                     <option value="<?php echo htmlspecialchars($unitType['id']); ?>">

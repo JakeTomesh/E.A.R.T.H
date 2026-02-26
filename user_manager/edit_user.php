@@ -26,6 +26,7 @@ require_once('../include/auth.php');
             </div>
             <div id="register_container">
                 <h2 id="page_title">Edit User Form</h2>
+                
                 <div id="form_register">
                     <form action="user_manager/index.php" method="POST">
                         <input type="hidden" name="controllerRequest" value="save_edit_user">
@@ -52,6 +53,16 @@ require_once('../include/auth.php');
                             <option value="0" <?php if($userToEdit->getIsActive() == 0) echo 'selected'; ?>>Inactive</option>
                         </select>
                         <br>
+                        <label for="reset_password">Reset Password:</label>
+                        <input type="password" id="reset_password" name="reset_password">
+                        <br>
+                        <label for="confirm_password">Confirm Password:</label>
+                        <input type="password" id="confirm_password" name="confirm_password">
+                        <br>
+                        <div id="show_hide_pass">
+                            <input type="checkbox" id="toggle_password">
+                            <label for="toggle_password">Show Password</label>
+                        </div>
                         <button type="submit" id="submit">Save Changes</button>
                     </form>
                     <div>
@@ -62,10 +73,18 @@ require_once('../include/auth.php');
                         <?php if($errorMessage): ?>
                             <span class="error_message"><?php echo htmlspecialchars($errorMessage); ?></span>
                         <?php endif; ?>
+                        <?php 
+                            $editErrorMessage = $_SESSION['edit_error_message'] ?? '';
+                            unset($_SESSION['edit_error_message']);
+                        ?>
+                        <?php if($editErrorMessage): ?>
+                            <span class="error_message"><?php echo htmlspecialchars($editErrorMessage); ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <script src="js/show_hide_password.js"></script>
 </body>
 </html>
