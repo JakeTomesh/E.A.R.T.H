@@ -54,12 +54,12 @@
 
                         <div>
                             <dt>Physical Quantity:</dt>
-                            <dd><?= htmlspecialchars($logDetails['physical_quantity']).' '.htmlspecialchars($logDetails['physical_unit_type_name']); ?></dd>
+                            <dd><?= htmlspecialchars(number_format($logDetails['physical_quantity'], 2)).' '.htmlspecialchars($logDetails['physical_unit_type_name']); ?></dd>
                         </div>
 
                         <div>
                             <dt>CO₂e Quantity:</dt>
-                            <dd><?= htmlspecialchars($logDetails['co2e_quantity']).' '.htmlspecialchars($logDetails['co2e_unit_type_name']); ?></dd>
+                            <dd><?= htmlspecialchars(number_format($logDetails['co2e_quantity'], 2)).' '.htmlspecialchars($logDetails['co2e_unit_type_name']); ?></dd>
                         </div>
 
                         <div>

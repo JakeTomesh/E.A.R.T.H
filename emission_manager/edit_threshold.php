@@ -37,7 +37,7 @@ require_once('../include/auth.php');
                         <input type="number" step="0.01" min="0" id="co2e_limit" name="co2e_limit" required value="<?php echo htmlspecialchars($thresholdToEdit['co2e_limit']); ?>">
                         <br>
                         <label for="unit_type">Unit Type:</label>
-                        <input type="text" id="unit_type" name="unit_type" disabled value="<?php echo htmlspecialchars($thresholdToEdit['unit_type_name']); ?>">
+                        <input type="text" id="unit_type" name="unit_type" disabled value="<?php echo htmlspecialchars($thresholdToEdit['unit_type_name'].'/Day'); ?>">
                         <br>
                         <button type="submit" id="submit">Save Changes</button>
                     </form>

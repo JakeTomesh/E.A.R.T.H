@@ -54,10 +54,13 @@
                     <div id="fieldset_container">
                         <fieldset id="emission_type_fieldset">
                             <legend>Emission Type:</legend>
-                            <select class="input" name="emission_type">
+                            <select class="input" name="emission_type" id="emission_type_select" required>
                                 <option value="" selected disabled hidden> - Select an Emission Type - </option>
                                 <?php foreach($emissionTypes as $emissionType): ?>
-                                    <option value="<?php echo htmlspecialchars($emissionType['id']); ?>">
+                                    <option 
+                                        value="<?php echo htmlspecialchars($emissionType['id']); ?>"
+                                        data-base-unit-type-id="<?php echo htmlspecialchars($emissionType['base_unit_type_id']); ?>"
+                                        >
                                         <?php echo htmlspecialchars($emissionType['name']); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -66,12 +69,14 @@
                         <fieldset id="unit_type_fieldset">
                             <legend>Unit Quantity & Unit Type:</legend>
                             <div id="unit_quantity">
-                                <input class="input" type="number"  name="unit_quantity" min="0" placeholder="00.00" required>
+                                <input class="input" type="number"  name="unit_quantity" min="0" step=".1" placeholder="00.00" required>
                             </div>
-                            <select class="input" name="unit_type">
+                            <select class="input" name="unit_type" id="unit_type_select" required disabled>
                                 <option value="" selected disabled hidden> - Select a Unit Type - </option>
                                 <?php foreach($unitTypes as $unitType): ?>
-                                    <option value="<?php echo htmlspecialchars($unitType['id']); ?>">
+                                    <option value="<?php echo htmlspecialchars($unitType['id']); ?>"
+                                        data-base-unit-type-id="<?php echo htmlspecialchars($unitType['base_unit_type_id']); ?>"
+                                        >
                                         <?php echo htmlspecialchars($unitType['name']); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -98,5 +103,6 @@
             </div>
         </div>
     </main>
+    <script src="js/unit_type_enforcer.js"></script>
 </body>
 </html>

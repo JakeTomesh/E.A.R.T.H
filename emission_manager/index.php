@@ -34,6 +34,7 @@ if($controllerAction == 'emission_input_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -48,6 +49,7 @@ else if($controllerAction == 'emission_logs_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -70,6 +72,7 @@ else if($controllerAction == 'emission_log_details_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -89,6 +92,7 @@ else if($controllerAction == 'manage_thresholds_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -114,6 +118,7 @@ else if($controllerAction == 'edit_threshold_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -127,6 +132,7 @@ else if($controllerAction == 'alert_logs_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -151,6 +157,7 @@ else if($controllerAction == 'alert_log_details_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -164,6 +171,7 @@ else if($controllerAction == 'manage_emission_factors_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -189,6 +197,7 @@ else if($controllerAction == 'edit_emission_factor_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -202,6 +211,7 @@ else if($controllerAction == 'add_emission_factor_nav'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -240,6 +250,7 @@ else if($controllerAction == 'save_add_emission_factor'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -266,6 +277,7 @@ else if($controllerAction == 'save_edit_emission_factor'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -292,6 +304,7 @@ else if($controllerAction == 'save_edit_threshold'){
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
         include('../include/error.php');
         exit();
     }
@@ -338,12 +351,51 @@ else if($controllerAction == 'submit_emission_input'){
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
+    
 
     //calculate co2e quantity based on emission factor for the selected type/unit
-    $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($licenseeId, $emissionTypeId, $unitTypeId);
+    $selectedUnitType = EmissionDb::getUnitTypeById($unitTypeId);
+    if ($selectedUnitType === false || $selectedUnitType === null) {
+        $_SESSION['error_message'] = 'Selected unit type not found.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    if(!isset($selectedUnitType['conversion_factor']) || !is_numeric($selectedUnitType['conversion_factor'])){
+        $_SESSION['error_message'] = 'Unit type data is invalid (missing conversion factor).';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+
+    //conversion factor for unit type to convert to standard unit for emission factor calculation
+    $conversionFactor = (float)$selectedUnitType['conversion_factor'];
+    if ($conversionFactor <= 0) {
+        $_SESSION['error_message'] = 'Unit type conversion factor must be greater than 0.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+
+    //convert submitted quantity to BASE units for emission factor calculation
+    $baseQuantity = (float)$unitQuantity * $conversionFactor;
+    if(!is_finite($baseQuantity) || $baseQuantity < 0){
+        $_SESSION['error_message'] = 'Calculated base quantity is invalid.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+    //get BASE unit type id for this group
+    $baseUnitType = EmissionDb::getBaseUnitTypeByGroup($selectedUnitType['base_unit_type_id']);
+    if(!$baseUnitType || $baseUnitType === false || $baseUnitType === null){
+        $_SESSION['error_message'] = 'Base unit type not found for selected unit type.';
+        header('Location: index.php?controllerRequest=emission_input_nav');
+        exit();
+    }
+
+    //get emission factor for this emission type and BASE unit type
+    $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($licenseeId, $emissionTypeId, $baseUnitType['id']);
+
+
 
     if ($emissionFactor === false || $emissionFactor === null) {
-        $_SESSION['error_message'] = 'No emission factor found for the selected emission type and unit.';
+        $_SESSION['error_message'] = 'No emission factor found for the selected emission type (base unit).';
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
@@ -361,7 +413,7 @@ else if($controllerAction == 'submit_emission_input'){
         exit();
     }
     //convert to co2e quantity and round to 2 decimal places
-    $co2eQuantity = round(((float)$unitQuantity) * $factor, 2);
+    $co2eQuantity = round($baseQuantity * $factor, 2);
 
     if (!is_finite($co2eQuantity) || $co2eQuantity < 0) {
         $_SESSION['error_message'] = 'Calculated CO₂e value is invalid.';
@@ -373,11 +425,13 @@ else if($controllerAction == 'submit_emission_input'){
     try{
         $licenseeId = $_SESSION['user']->getLicenseeId();
         //return new emission ID
-        $newEmissionId = EmissionDb::addEmissionLog($licenseeId, $userId, $emissionTypeId, $unitTypeId, $unitQuantity,  $co2eQuantity, $emissionFactor, $notes, $emissionStartDate, $emissionEndDate);
+        $newEmissionId = EmissionDb::addEmissionLog($licenseeId, $userId, $emissionTypeId, $unitTypeId, $unitQuantity,  $co2eQuantity, $emissionFactor['id'], $notes, $emissionStartDate, $emissionEndDate);
         $_SESSION['user_message'] = 'Emission log added successfully.';
     }catch(Exception $e){
         $error_message = $e->getMessage();
         $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
+
         include('../include/error.php');
         exit();
     }
@@ -392,20 +446,31 @@ else if($controllerAction == 'submit_emission_input'){
     $threshold = EmissionDb::getThresholdLimitByEmissionType($licenseeId, $emissionTypeId);
 
 
-    if ($threshold !== null) {
-        if (!isset($threshold['co2e_limit']) || !is_numeric($threshold['co2e_limit'])) {
+    if($threshold === false || $threshold === null){
+        //no threshold set for this emission type, so skip alert log check
+        $threshold = null;
+    }else{
+        if(!isset($threshold['co2e_limit']) || !is_numeric($threshold['co2e_limit'])) {
             $_SESSION['error_message'] = 'Threshold data is invalid (missing CO₂e limit).';
             header('Location: index.php?controllerRequest=emission_input_nav');
             exit();
         }
-    }
 
+        //thresholds are a rate of co2e per day.
+        $limit = (float)$threshold['co2e_limit']; 
 
+        //calculate number of days in emission period for this log entry
+        $startDate = new DateTime($emissionStartDate);
+        $endDate = new DateTime($emissionEndDate);
+        $interval = $startDate->diff($endDate);
+        $days = $interval->days + 1; //include both start and end date
 
-    if ($threshold !== null) {
-        $limit = (float)$threshold['co2e_limit'];
-        //compare co2e quantity to threshold limit
-        if($co2eQuantity > $limit){
+        //daily rate of co2e for this log entry
+        $co2eDailyRate = round($co2eQuantity / $days, 2);
+
+        
+        //compare co2e daily rate to threshold rate.
+        if($co2eDailyRate > $limit){
             //exceeds threshold, create alert log entry
             try{
                 //switch statment for alert message based on emission type
@@ -438,10 +503,11 @@ else if($controllerAction == 'submit_emission_input'){
                     default:
                         $emissionTypeMessage = 'An emission entry exceeds threshold.';
                 }
-                $isvalidAlertLog = EmissionDb::addAlertLog($licenseeId, $newEmissionId, $emissionTypeId, $co2eQuantity, $threshold['id'], $emissionTypeMessage);
+                $isvalidAlertLog = EmissionDb::addAlertLog($licenseeId, $newEmissionId, $emissionTypeId, $co2eDailyRate, $threshold['id'], $emissionTypeMessage);
             }catch(Exception $e){
                 $error_message = $e->getMessage();
                 $_SESSION['error_message'] = $error_message;
+                $_SESSION['error_trace'] = $e->getTraceAsString();
                 include('../include/error.php');
                 exit();
             }
@@ -458,10 +524,8 @@ else if($controllerAction == 'submit_emission_input'){
         }else if($isvalidAlertLog === true){
             $_SESSION['alert_message'] = ' Alert log created for threshold exceedance.';
         }
+        
     }
-    
-
-    
 
     //display pop up message to user via 'show_popup'. If alert was triggered, include that message in pop up as well.
     if($newEmissionId > 0 && $newEmissionId !== false ){

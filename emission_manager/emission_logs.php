@@ -58,8 +58,8 @@
                                         <td><?php echo htmlspecialchars($log['id']); ?></td>
                                         <td><?php echo htmlspecialchars($log['username']); ?></td>
                                         <td><?php echo htmlspecialchars($log['emission_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['physical_quantity']).' '.htmlspecialchars($log['physical_unit_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['co2e_quantity']).' '.htmlspecialchars($log['co2e_unit_type_name']); ?></td>
+                                        <td><?php echo htmlspecialchars(number_format($log['physical_quantity'], 2)).' '.htmlspecialchars($log['physical_unit_type_name']); ?></td>
+                                        <td><?php echo htmlspecialchars(number_format($log['co2e_quantity'], 2)).' '.htmlspecialchars($log['co2e_unit_type_name'].'/Day'); ?></td>
                                         <td><?php echo htmlspecialchars(formatDate($log['emission_start_date'], 'm-d-Y')); ?></td>
                                         <td><?php echo htmlspecialchars(formatDate($log['emission_end_date'], 'm-d-Y')); ?></td>
 

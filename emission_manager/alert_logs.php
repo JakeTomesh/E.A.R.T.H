@@ -49,8 +49,8 @@
                                         <td><?php echo htmlspecialchars($log['id']); ?></td>
                                         <td><?php echo htmlspecialchars($log['emission_log_id']); ?></td>
                                         <td><?php echo htmlspecialchars($log['emission_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['co2e_quantity']).' '.htmlspecialchars($log['co2e_unit_type_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['co2e_limit']).' '.htmlspecialchars($log['co2e_limit_unit_type_name']); ?></td>
+                                        <td><?php echo htmlspecialchars(number_format($log['co2e_quantity'], 2)).' '.htmlspecialchars($log['co2e_unit_type_name'].'/Day'); ?></td>
+                                        <td><?php echo htmlspecialchars(number_format($log['co2e_limit'], 2)).' '.htmlspecialchars($log['co2e_limit_unit_type_name'].'/Day'); ?></td>
                                         <td><?php echo htmlspecialchars(date('m-d-Y', strtotime($log['date_created']))); ?></td>
                                         <td>
                                             <form action="emission_manager/index.php" method="POST">

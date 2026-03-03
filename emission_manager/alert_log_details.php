@@ -52,17 +52,17 @@
                                 <dd><?= htmlspecialchars($alertLogDetails['emission_type_name']); ?></dd>
                             </div>
                             <div>
-                                <dt>CO₂e Quantity:</dt>
+                                <dt>CO₂e Daily Quantity:</dt>
                                 <dd>
-                                    <?= htmlspecialchars($alertLogDetails['co2e_quantity']); ?>
-                                    <?= htmlspecialchars($alertLogDetails['co2e_unit_type_name']); ?>
+                                    <?= htmlspecialchars(number_format($alertLogDetails['co2e_quantity'], 2)); ?>
+                                    <?= htmlspecialchars($alertLogDetails['co2e_unit_type_name'].'/Day'); ?>
                                 </dd>
                             </div>
                             <div>
                                 <dt>CO₂e Limit:</dt>
                                 <dd>
-                                    <?= htmlspecialchars($alertLogDetails['co2e_limit']); ?>
-                                    <?= htmlspecialchars($alertLogDetails['co2e_limit_unit_type_name']); ?>
+                                    <?= htmlspecialchars(number_format($alertLogDetails['co2e_limit'], 2)); ?>
+                                    <?= htmlspecialchars($alertLogDetails['co2e_limit_unit_type_name'].'/Day'); ?>
                                 </dd>
                             </div>
                             <div>
@@ -94,11 +94,11 @@
                             </div>
                             <div>
                                 <dt>Physical Quantity:</dt>
-                                <dd><?= htmlspecialchars($emissionLogDetails['physical_quantity']).' '.htmlspecialchars($emissionLogDetails['physical_unit_type_name']); ?></dd>
+                                <dd><?= htmlspecialchars(number_format($emissionLogDetails['physical_quantity'], 2)).' '.htmlspecialchars($emissionLogDetails['physical_unit_type_name']); ?></dd>
                             </div>
                             <div>
                                 <dt>CO₂e Quantity:</dt>
-                                <dd><?= htmlspecialchars($emissionLogDetails['co2e_quantity']).' '.htmlspecialchars($emissionLogDetails['co2e_unit_type_name']); ?></dd>
+                                <dd><?= htmlspecialchars(number_format($emissionLogDetails['co2e_quantity'], 2)).' '.htmlspecialchars($emissionLogDetails['co2e_unit_type_name']); ?></dd>
                             </div>
                             <div>
                                 <dt>Emission Factor:</dt>

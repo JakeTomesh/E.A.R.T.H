@@ -266,7 +266,10 @@ class EmissionDb{
                     tl.id,
                     tl.co2e_limit
                 FROM ThresholdLimit tl
-                WHERE tl.licensee_id = :licenseeId AND tl.emission_type_id = :emissionTypeId';
+                WHERE tl.licensee_id = :licenseeId 
+                AND tl.emission_type_id = :emissionTypeId
+                AND tl.co2e_unit_type_id = 10
+                LIMIT 1';
         $statement = $db->prepare($query);
         $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
         $statement->bindValue(':emissionTypeId', $emissionTypeId, PDO::PARAM_INT);
@@ -308,5 +311,28 @@ class EmissionDb{
         }else{
             return false;
         }
+    }
+
+    public static function getUnitTypeById($unitTypeId){
+        $db = Database::getDB();
+        $query = 'SELECT id, code, name, base_unit_type_id, is_base_unit, conversion_factor
+                FROM UnitType
+                WHERE id = :unitTypeId';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':unitTypeId', $unitTypeId, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function getBaseUnitTypeByGroup($baseUnitGroup){
+        $db = Database::getDB();
+        $query = 'SELECT id, code, name, base_unit_type_id, is_base_unit, conversion_factor
+                FROM UnitType
+                WHERE base_unit_type_id = :baseUnitGroup AND is_base_unit = 1
+                LIMIT 1';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':baseUnitGroup', $baseUnitGroup, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 }

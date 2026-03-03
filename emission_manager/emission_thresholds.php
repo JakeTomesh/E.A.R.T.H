@@ -48,8 +48,8 @@ include('../include/auth.php');
                             <?php foreach($thresholds as $threshold): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($threshold['emission_type_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($threshold['co2e_limit']); ?></td>
-                                    <td><?php echo htmlspecialchars($threshold['unit_type_name']); ?></td>
+                                    <td><?php echo htmlspecialchars(number_format($threshold['co2e_limit'], 2)); ?></td>
+                                    <td><?php echo htmlspecialchars($threshold['unit_type_name'].'/Day'); ?></td>
                                     <td><?php echo htmlspecialchars(date('m-d-Y', strtotime($threshold['date_updated']))); ?></td>
                                     <td>
                                         <a id="edit_threshold" class="btn" href="emission_manager/index.php?controllerRequest=edit_threshold_nav&threshold_id=<?php echo htmlspecialchars($threshold['id']); ?>">Edit</a>

@@ -5,6 +5,11 @@ require_once '../model/UserDb.php';
 require_once '../model/EmissionDb.php';
 require_once '../model/Emission.php';
 
+if (!defined('APP_ENV')) {
+    define('APP_ENV', 'development');
+}
+// change to 'production' when deployed
+
 if (session_status() === PHP_SESSION_NONE) {
 
     // Session cookie (until browser is closed)
