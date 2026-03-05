@@ -2,7 +2,7 @@
     class Database{
         private static $dsn = 'mysql:host=db;dbname=earth';
         private static $dbUsername = 'mgs_user';
-        private static $dbPassword = 'pa55word';
+        private static $dbPassword = 'password';
         private static $db;
 
         public static function getDb(){

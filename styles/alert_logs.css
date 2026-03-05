@@ -77,10 +77,11 @@
   text-decoration: underline;
   color: var(--primary-color);
 }
-
+/*
 @media (min-width:1300px) {
   #alert_logs_container{
     flex-direction: row;
   }
   
 }
+  */

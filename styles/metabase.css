@@ -1,0 +1,48 @@
+html, body{
+  height: 100%;
+}
+
+main{
+  min-height: 0;
+}
+
+#container{
+  min-height: 100vh;
+}
+/* If this page uses a background image class, don't let it "end early" */
+.background_img {
+  min-height: 100vh;
+}
+
+/* The shell is the box the embed must fill */
+.mb-embed-shell{
+  width: 100%;
+  height: calc(100vh - 220px); /* adjust this number to your header/title height */
+  min-height: 600px;          /* safety so it’s usable on shorter viewports */
+}
+
+/* The Metabase custom element must be allowed to fill the shell */
+#mbDashboardStatic{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Grid/flex gotcha: allow children to grow properly */
+#metrics_static_container{
+  min-height: 0;
+}
+/* Make Quick Metrics span full width of the 12-col grid */
+/* Quick embed: full width, but not necessarily full viewport height */
+.mb-embed-shell--quick{
+  width: 100%;
+  height: 65vh;        /* pick a height that feels “dashboardy” */
+  min-height: 520px;   /* prevents it from being tiny */
+}
+
+/* Ensure the quick metabase component fills its shell */
+#mbDashboard{
+  display: block;
+  width: 100%;
+  height: 100%;
+}

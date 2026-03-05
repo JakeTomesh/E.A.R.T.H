@@ -7,6 +7,16 @@
 <head>
     <?php include '../include/head.php'; ?>
     <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/metabase.css">
+    <script defer src="http://localhost:3000/app/embed.js"></script>
+    <script>
+        // Metabase reads this global config
+        window.metabaseConfig = {
+            theme: { preset: "dark" },
+            isGuest: true,
+            instanceUrl: "http://localhost:3000"
+        };
+    </script>
 </head>
 <body>
     <header>
@@ -58,13 +68,24 @@
                         </a>';
                 }?>
                 
-                <div id="menu_quick_metrics" class="dashboard_menu_item">
+                <div id="menu_quick_metrics" >
                     <div>
-                        <h3>Quick Metrics Displayed Here</h3>
+                        
+                        <div id="mbStatus" aria-live="polite"></div>
+
+                        <!-- IMPORTANT: no token here -->
+                       <div class="mb-embed-shell mb-embed-shell--quick">
+                            <metabase-dashboard
+                                id="mbDashboard"
+                                with-title="true"
+                                with-downloads="true">
+                            </metabase-dashboard>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <script src="/Assignments/E.A.R.T.H/js/load_metabase_dashboard.js"></script>
 </body>
 </html>
