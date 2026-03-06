@@ -29,13 +29,16 @@ require_once '../include/auth.php';
                 <h1>E.A.R.T.H</h1>
                 <h2>Emission and Resource Tracking Hub</h2>
                 <div id="user_nav_div">
-                <a href="user_manager/index.php?controllerRequest=user_logout" id="logout" class="btn">Logout</a>
+                    <a href="dashboard_manager/index.php?controllerRequest=dashboard_nav" 
+                    id="back" class="btn">Back to Dashboard</a>
+                    <a href="user_manager/index.php?controllerRequest=user_logout" 
+                    id="logout" class="btn">Logout</a>
                 </div>
             </div>
           </div>
           <div id="animated_line"></div>
           <div id="metrics_static_container">
-            <h2>Static Metrics</h2>
+            <h2>Overall Metrics</h2>
 
             <div id="mbStatusStatic" aria-live="polite"></div>
 

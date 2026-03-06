@@ -75,6 +75,12 @@ form {
     min-width: 10em;
 }
 
+#emission_input_error_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media (max-width:800px){
     #notes_fieldset{
         grid-column: 4/-1;

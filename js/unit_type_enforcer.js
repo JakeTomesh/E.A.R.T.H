@@ -1,46 +1,68 @@
 "use strict";
 
-document.addEventListener('DOMContentLoaded', () =>{
-    const emissionSelect = document.getElementById('emission_type_select');
-    const unitTypeSelect = document.getElementById('unit_type_select');
+document.addEventListener("DOMContentLoaded", () => {
+    const emissionSelect = document.getElementById("emission_type_select");
+    const unitTypeSelect = document.getElementById("unit_type_select");
 
-    if(!emissionSelect || !unitTypeSelect){
+    if (!emissionSelect || !unitTypeSelect) {
         return;
     }
 
-    const unitTypeOptions = Array.from(unitTypeSelect.querySelectorAll('option')).filter(option => option.value !== '');
+    const allUnitTypeOptions = Array.from(unitTypeSelect.querySelectorAll("option"))
+        .filter(option => option.value !== "");
 
-    //disable unit type select until an emission type is selected
-    unitTypeOptions.forEach(option => {
-        option.hidden = true;
-        option.disabled = true;
-    });
+    const placeholderOption = unitTypeSelect.querySelector("option[value='']");
 
-    function filterUnitOptions(){
-      
+    const emissionUnitRules = {
+        1: ["kWh", "MWh", "Wh"],    // electricity - grid
+        2: ["kWh", "MWh", "Wh"],    // electricity - renewable
+        3: ["therm", "MMBtu"],      // natural gas
+        4: ["L", "gal"],            // diesel
+        5: ["kg", "lb"],            // refrigerant
+        6: ["L", "gal", "m3"],      // water usage
+        7: ["kg", "lb"],            // waste - electronic
+        8: ["kg", "lb"]             // waste landfill
+    };
+
+    function resetUnitTypeSelect() {
+        unitTypeSelect.innerHTML = "";
+        if (placeholderOption) {
+            unitTypeSelect.appendChild(placeholderOption.cloneNode(true));
+        }
+        unitTypeSelect.value = "";
+    }
+
+    function filterUnitOptions() {
         const selectedEmissionOption = emissionSelect.selectedOptions[0];
-        const allowedBaseId = selectedEmissionOption?.getAttribute('data-base-unit-type-id');
+        const allowedBaseId = selectedEmissionOption?.getAttribute("data-base-unit-type-id");
+        const emissionId = emissionSelect.value;
 
-        unitTypeSelect.disabled = !allowedBaseId;
-        //reset unit type select to placeholder
-        unitTypeSelect.value = '';
+        resetUnitTypeSelect();
 
-        //if no emission type selected, disable all unit type options
-        if(!allowedBaseId){
-            unitTypeOptions.forEach(option => {
-                option.hidden = true;
-                option.disabled = true;
-            });
+        if (!allowedBaseId || !emissionId) {
+            unitTypeSelect.disabled = true;
             return;
         }
 
-        unitTypeOptions.forEach(option => {
-            const match =  option.getAttribute('data-base-unit-type-id') === allowedBaseId;
-            option.hidden = !match;
-            option.disabled = !match;
+        const allowedUnitCodes = emissionUnitRules[emissionId] || [];
+
+        const matchingOptions = allUnitTypeOptions.filter(option => {
+            const baseIdMatch =
+                option.getAttribute("data-base-unit-type-id") === allowedBaseId;
+
+            const unitCode = option.getAttribute("data-unit-code");
+            const codeMatch = allowedUnitCodes.includes(unitCode);
+
+            return baseIdMatch && codeMatch;
         });
+
+        matchingOptions.forEach(option => {
+            unitTypeSelect.appendChild(option.cloneNode(true));
+        });
+
+        unitTypeSelect.disabled = matchingOptions.length === 0;
     }
 
-    emissionSelect.addEventListener('change', filterUnitOptions);
+    emissionSelect.addEventListener("change", filterUnitOptions);
     filterUnitOptions();
 });

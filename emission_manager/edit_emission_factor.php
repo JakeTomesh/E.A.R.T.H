@@ -36,7 +36,7 @@ require_once('../include/auth.php');
                         <label for="emission_unit_type">Emission Unit Type:</label>
                         <input type="text" id="emission_unit_type" name="emission_unit_type" disabled value="<?php echo htmlspecialchars($emissionFactorToEdit['unit_type_name']); ?>">
                         <label for="emission_factor">Factor:</label>
-                        <input type="number" step="0.01" min="0" id="emission_factor" name="emission_factor" required value="<?php echo htmlspecialchars($emissionFactorToEdit['factor']); ?>">
+                        <input type="number" step="0.001" min="0" id="emission_factor" name="emission_factor" required value="<?php echo htmlspecialchars($emissionFactorToEdit['factor']); ?>">
                         <br>
                         <button type="submit" id="submit">Save Changes</button>
                     </form>

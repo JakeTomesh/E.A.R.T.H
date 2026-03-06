@@ -28,8 +28,7 @@ if($controllerAction == 'emission_input_nav'){
     try{
         $emissionTypes = EmissionDb::getEmissionTypes();
         $unitTypes = EmissionDb::getUnitTypes();
-        //remove co2e unit types from input list
-        array_splice($unitTypes, 9);
+        //unitTypes filters out BASE unit of CO2e. 
         
     }catch(Exception $e){
         $error_message = $e->getMessage();
