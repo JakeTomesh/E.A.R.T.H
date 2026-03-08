@@ -96,10 +96,11 @@ dt{
   overflow-wrap: anywhere;  
 }
 
-
+/*
 @media (min-width:1300px) {
   #emission_logs_container{
     flex-direction: row;
   }
   
 }
+  */

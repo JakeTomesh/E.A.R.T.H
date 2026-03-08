@@ -13,7 +13,7 @@ class EmissionDb{
 
     public static function getUnitTypes(){
         $db = Database::getDB();
-        $query = 'SELECT * FROM UnitType ORDER BY id';
+        $query = 'SELECT * FROM UnitType WHERE base_unit_type_id != 4 ORDER BY id';
         $statement = $db->prepare($query);
         $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);

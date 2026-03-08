@@ -28,26 +28,28 @@
             </div>
             <div id="animated_line"></div>
             <div id="emission_input_container">
-                <?php
-                    //display any error messages from previous submission attempt
-                    if(isset($_SESSION['error_message'])){
-                        echo '<span id="error_message">' . htmlspecialchars($_SESSION['error_message']) . '</span>';
-                        unset($_SESSION['error_message']);
-                    }
-                    //display pop up alert with input message and alert message if triggered
-                    if(isset($_SESSION['show_popup']) && $_SESSION['show_popup']){
-                        if (isset($_SESSION['alert_message'])) {
-                            $message = $_SESSION['alert_message'] . ' ' . $_SESSION['input_message'];
-                            echo '<script>alert(' . json_encode($message) . ');</script>';
-                        } else {
-                            echo '<script>alert(' . json_encode($_SESSION['input_message']) . ');</script>';
+                <div id="emission_input_error_container">
+                    <?php
+                        //display any error messages from previous submission attempt
+                        if(isset($_SESSION['error_message'])){
+                            echo '<span class="error_message" id="error_message">' . htmlspecialchars($_SESSION['error_message']) . '</span>';
+                            unset($_SESSION['error_message']);
                         }
-                        unset($_SESSION['show_popup']);
-                        $_SESSION['show_popup'] = false;
-                        unset($_SESSION['alert_message']);
-                        unset($_SESSION['input_message']);
-                    }
-                ?>
+                        //display pop up alert with input message and alert message if triggered
+                        if(isset($_SESSION['show_popup']) && $_SESSION['show_popup']){
+                            if (isset($_SESSION['alert_message'])) {
+                                $message = $_SESSION['alert_message'] . ' ' . $_SESSION['input_message'];
+                                echo '<script>alert(' . json_encode($message) . ');</script>';
+                            } else {
+                                echo '<script>alert(' . json_encode($_SESSION['input_message']) . ');</script>';
+                            }
+                            unset($_SESSION['show_popup']);
+                            $_SESSION['show_popup'] = false;
+                            unset($_SESSION['alert_message']);
+                            unset($_SESSION['input_message']);
+                        }
+                    ?>
+                </div>
                 <h2 id="page_title">Emission Input Form</h2>
                 <form action="emission_manager/index.php" method="POST">
                     <input type="hidden" name="controllerRequest" value="submit_emission_input">
@@ -69,14 +71,14 @@
                         <fieldset id="unit_type_fieldset">
                             <legend>Unit Quantity & Unit Type:</legend>
                             <div id="unit_quantity">
-                                <input class="input" type="number"  name="unit_quantity" min="0" step=".1" placeholder="00.00" required>
+                                <input class="input" type="number"  name="unit_quantity" min="0" step=".01" placeholder="00.00" required>
                             </div>
                             <select class="input" name="unit_type" id="unit_type_select" required disabled>
                                 <option value="" selected disabled hidden> - Select a Unit Type - </option>
                                 <?php foreach($unitTypes as $unitType): ?>
                                     <option value="<?php echo htmlspecialchars($unitType['id']); ?>"
                                         data-base-unit-type-id="<?php echo htmlspecialchars($unitType['base_unit_type_id']); ?>"
-                                        >
+                                        data-unit-code="<?php echo htmlspecialchars($unitType['code']); ?>">
                                         <?php echo htmlspecialchars($unitType['name']); ?>
                                     </option>
                                 <?php endforeach; ?>

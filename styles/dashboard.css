@@ -69,7 +69,12 @@
     color: var(--primary-color);
     margin-top: .2em;
 }
-
+#metrics_static_container h2{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin: 1em;
+}
 /* Responsive Design */
 #dashboard_container:not(:has(#menu_admin_portal)) #menu_view_metrics{
     grid-column: 6/8;

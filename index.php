@@ -13,13 +13,16 @@
 </head>
 
 <body>
-    <header>
-        <?php include 'include/header.php';?>
-    </header>
+    
     <main>
+        
         <div id="site_container" class="background_img">
+             
             <div id="login_container">
                 <div id="title">
+                    <div id="logo_index">
+                        <img src="misc/images/logo.png" alt="E.A.R.T.H Logo">
+                    </div>
                     <h1>E.A.R.T.H</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
                 </div>
@@ -44,8 +47,14 @@
                     
                 </div>
                 <div>
-                    <button type="button" id="admin_login_button">Login Admin</button>
-                    <button type="button" id="user_login_button">Login User</button>
+                    <div>
+                        <button type="button" id="admin_login_button_license_1">Login Admin 1</button>
+                        <button type="button" id="user_login_button_license_1">Login User 1</button>
+                    </div>
+                    <div>
+                        <button type="button" id="admin_login_button_license_2">Login Admin 2</button>
+                        <button type="button" id="user_login_button_license_2">Login User 2</button>
+                    </div>
                 </div>
             </div>
             
@@ -53,16 +62,28 @@
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', ()=>{
-            const adminLoginButton = document.getElementById('admin_login_button');
-            const userLoginButton = document.getElementById('user_login_button');
+            const adminLoginButtonLicense1 = document.getElementById('admin_login_button_license_1');
+            const userLoginButtonLicense1 = document.getElementById('user_login_button_license_1');
+            const adminLoginButtonLicense2 = document.getElementById('admin_login_button_license_2');
+            const userLoginButtonLicense2 = document.getElementById('user_login_button_license_2');
 
-            adminLoginButton.addEventListener('click', () => {
+            adminLoginButtonLicense1.addEventListener('click', () => {
                 document.getElementById('username').value = 'JTomesh';
                 document.getElementById('password').value = 'TestPassword';
             });
 
-            userLoginButton.addEventListener('click', () => {
+            userLoginButtonLicense1.addEventListener('click', () => {
                 document.getElementById('username').value = 'JDoe';
+                document.getElementById('password').value = 'TestPassword';
+            });
+
+            adminLoginButtonLicense2.addEventListener('click', () => {
+                document.getElementById('username').value = 'ABangsberg';
+                document.getElementById('password').value = 'TestPassword';
+            });
+
+            userLoginButtonLicense2.addEventListener('click', () => {
+                document.getElementById('username').value = 'JRybacki';
                 document.getElementById('password').value = 'TestPassword';
             });
         })
