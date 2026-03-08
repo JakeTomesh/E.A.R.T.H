@@ -42,9 +42,14 @@ main{
     flex: 1;
     min-height: 0;
 }
-#logo{
+#logo img{
     position: absolute;
     top: auto;
+    max-width: 50px;
+}
+#logo_index img{
+    display: block;
+    max-width: 80px;
 }
 .background_img{
     min-height: 100%;
