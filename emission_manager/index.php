@@ -1,6 +1,6 @@
 <?php 
 require_once('../include/bootstrap.php');
-
+require_once('../model/HelperEmission.php');
 //string sanitization function
 function sanitizeString(?string $input): string {
     if ($input === null) return '';
@@ -319,39 +319,48 @@ else if($controllerAction == 'submit_emission_input'){
     $licenseeId = $_SESSION['user']->getLicenseeId();
     $userId = $_SESSION['user']->getId();
 
+    //save old input for holding state on invalidation
+    $_SESSION['old_input'] = [
+        'emission_type' => $emissionTypeId,
+        'unit_type' => $unitTypeId,
+        'unit_quantity' => $unitQuantity,
+        'emission_start_date' => $emissionStartDate,
+        'emission_end_date' => $emissionEndDate,
+        'notes' => $notes
+    ];
+
+
     //validate input
-    if($emissionTypeId === false || $emissionTypeId === null){
+    if(!HelperEmission::validateInput($emissionTypeId, 'emission_type')){
         $_SESSION['error_message'] = 'Invalid emission type selection.';
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
-    if($unitTypeId === false || $unitTypeId === null){
+    if(!HelperEmission::validateInput($unitTypeId, 'unit_type')){
         $_SESSION['error_message'] = 'Invalid unit type selection.';
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
-    if($unitQuantity === false || $unitQuantity < 0){
+    if(!HelperEmission::validateInput($unitQuantity, 'unit_quantity')){
         $_SESSION['error_message'] = 'Invalid unit quantity. Must be a non-negative number.';
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
-    if($emissionStartDate === false || $emissionStartDate === null || $emissionEndDate === false || $emissionEndDate === null){
-        $_SESSION['error_message'] = 'Invalid emission date(s). Please provide valid start and end dates.';
+    if(!HelperEmission::validateInputDates($emissionStartDate, $emissionEndDate)){
+        //error set in HelperEmission 
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
-    if($emissionStartDate > date('Y-m-d') || $emissionEndDate > date('Y-m-d')){
-        $_SESSION['error_message'] = 'Emission dates cannot be in the future.';
-        header('Location: index.php?controllerRequest=emission_input_nav');
-        exit();
-    }
-    if($emissionEndDate < $emissionStartDate){
-        $_SESSION['error_message'] = 'Emission end date cannot be before start date.';
-        header('Location: index.php?controllerRequest=emission_input_nav');
-        exit();
-    }
-    
 
+    unset($_SESSION['old_input']);
+
+    
+    //******************************************************************
+    //********** REFACTOR STOPPED HERE ******************************* */
+    //*******************************************************************
+    
+    
+    
     //calculate co2e quantity based on emission factor for the selected type/unit
     $selectedUnitType = EmissionDb::getUnitTypeById($unitTypeId);
     if ($selectedUnitType === false || $selectedUnitType === null) {
@@ -534,6 +543,7 @@ else if($controllerAction == 'submit_emission_input'){
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
+    //end of emission input
 }
         
 

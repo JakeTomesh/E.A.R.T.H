@@ -1,6 +1,15 @@
 <?php 
     require_once '../include/bootstrap.php';
     require_once '../include/auth.php'; 
+
+    $oldInput = $_SESSION['old_input'] ?? [];
+
+    $selectedEmissionTypeId = $oldInput['emission_type'] ?? '';
+    $selectedUnitTypeId = $oldInput['unit_type'] ?? '';
+    $unitQuantity = $oldInput['unit_quantity'] ?? '';
+    $emissionStartDate = $oldInput['emission_start_date'] ?? '';
+    $emissionEndDate = $oldInput['emission_end_date'] ?? '';
+    $notes = $oldInput['notes'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,54 +66,65 @@
                         <fieldset id="emission_type_fieldset">
                             <legend>Emission Type:</legend>
                             <select class="input" name="emission_type" id="emission_type_select" required>
-                                <option value="" selected disabled hidden> - Select an Emission Type - </option>
+
+                                <option value=""<?php echo empty($selectedEmissionTypeId) ? ' selected' : ''; ?> disabled hidden> - Select an Emission Type - </option>
+
                                 <?php foreach($emissionTypes as $emissionType): ?>
                                     <option 
                                         value="<?php echo htmlspecialchars($emissionType['id']); ?>"
                                         data-base-unit-type-id="<?php echo htmlspecialchars($emissionType['base_unit_type_id']); ?>"
-                                        >
+                                        <?php echo (isset($selectedEmissionTypeId) && $selectedEmissionTypeId == $emissionType['id']) ? ' selected' : ''; ?>>
                                         <?php echo htmlspecialchars($emissionType['name']); ?>
                                     </option>
                                 <?php endforeach; ?>
+
                             </select>
                         </fieldset>
                         <fieldset id="unit_type_fieldset">
                             <legend>Unit Quantity & Unit Type:</legend>
                             <div id="unit_quantity">
-                                <input class="input" type="number"  name="unit_quantity" min="0" step=".01" placeholder="00.00" required>
+                                <input class="input" type="number"  name="unit_quantity" min="0" step=".01" placeholder="00.00" value="<?php echo htmlspecialchars($unitQuantity); ?>" required>
                             </div>
                             <select class="input" name="unit_type" id="unit_type_select" required disabled>
+
                                 <option value="" selected disabled hidden> - Select a Unit Type - </option>
+
                                 <?php foreach($unitTypes as $unitType): ?>
                                     <option value="<?php echo htmlspecialchars($unitType['id']); ?>"
                                         data-base-unit-type-id="<?php echo htmlspecialchars($unitType['base_unit_type_id']); ?>"
-                                        data-unit-code="<?php echo htmlspecialchars($unitType['code']); ?>">
+                                        data-unit-code="<?php echo htmlspecialchars($unitType['code']); ?>"
+                                        <?php echo (isset($selectedUnitTypeId) && $selectedUnitTypeId == $unitType['id']) ? ' selected' : ''; ?>>
                                         <?php echo htmlspecialchars($unitType['name']); ?>
                                     </option>
                                 <?php endforeach; ?>
+
                             </select>
                         </fieldset>
                         <fieldset id="datetime_fieldset">
                             <legend>Emission Date - Start/End:</legend>
                             <div>
                                 <label for="emission_start_date">Start:</label>
-                                <input class="input" id="start_datepicker" type="date" name="emission_start_date" max="<?= date('Y-m-d') ?>" required>
+                                <input class="input" id="start_datepicker" type="date" name="emission_start_date" max="<?= date('Y-m-d') ?>" value="<?php echo htmlspecialchars($emissionStartDate); ?>" required>
                             </div>
                             <div>
                                 <label for="emission_end_date">End:</label>
-                                <input class="input" id="end_datepicker" type="date" name="emission_end_date" max="<?= date('Y-m-d') ?>" required>
+                                <input class="input" id="end_datepicker" type="date" name="emission_end_date" max="<?= date('Y-m-d') ?>" value="<?php echo htmlspecialchars($emissionEndDate); ?>" required>
                             </div>
                         </fieldset>
                         <fieldset id="notes_fieldset">
                             <legend>Notes:</legend>
-                            <textarea name="notes" rows="4" cols="50" placeholder="Specific notes about this emission log..."></textarea>
+                            <textarea name="notes" rows="4" cols="50" placeholder="Specific notes about this emission log..."><?php echo htmlspecialchars($notes); ?></textarea>
                         </fieldset>
                     </div>
                     <button type="submit" id="submit">Submit Emission Data</button>
                 </form>
+                <?php unset($_SESSION['old_input']); ?>
             </div>
         </div>
     </main>
     <script src="js/unit_type_enforcer.js"></script>
+    <footer>
+        <?php include('../include/footer.php'); ?>
+    </footer>
 </body>
 </html>

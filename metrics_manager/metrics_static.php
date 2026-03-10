@@ -52,7 +52,9 @@ require_once '../include/auth.php';
           </div>
       </div>
     </main>
-
     <script src="/Assignments/E.A.R.T.H/js/load_metabase_static_metrics.js"></script>
+    <footer>
+        <?php include('../include/footer.php'); ?>
+    </footer>
 </body>
 </html>

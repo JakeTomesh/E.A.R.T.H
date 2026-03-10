@@ -86,5 +86,8 @@ require_once('../include/auth.php');
         </div>
     </main>
     <script src="js/show_hide_password.js"></script>
+    <footer>
+        <?php include('../include/footer.php'); ?>
+    </footer>
 </body>
 </html>

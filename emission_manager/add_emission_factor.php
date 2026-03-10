@@ -67,5 +67,8 @@ require_once('../include/auth.php');
             </div>
         </div>
     </main>
+    <footer>
+        <?php include('../include/footer.php'); ?>
+    </footer>
 </body>
 </html>

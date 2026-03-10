@@ -87,5 +87,8 @@
         </div>
     </main>
     <script src="/Assignments/E.A.R.T.H/js/load_metabase_dashboard.js"></script>
+    <footer>
+        <?php include('../include/footer.php'); ?>
+    </footer>
 </body>
 </html>

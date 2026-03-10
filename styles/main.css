@@ -43,7 +43,7 @@ main{
     min-height: 0;
 }
 #logo img{
-    position: absolute;
+    position: relative;
     top: auto;
     max-width: 50px;
 }
@@ -178,6 +178,18 @@ main{
 }
 #toggle_password{
     width: 10%;
+}
+
+footer{
+    background: linear-gradient(to bottom, white , var(--primary-color) 30%);
+    font-size: 80%;
+    color: white;
+    text-align: center;
+    letter-spacing: .1em;
+    padding: .2em 0;
+}
+footer p {
+    margin-top: .7em;
 }
 /*Media Queries */
 @media (max-width: 950px){
