@@ -331,41 +331,52 @@ else if($controllerAction == 'submit_emission_input'){
     ];
 
     //validate input
-    if(!HelperEmission::validateInput($emissionTypeId, 'emission_type')){
-        header('Location: index.php?controllerRequest=emission_input_nav');
+    try{
+        if(!HelperEmission::validateInput($emissionTypeId, 'emission_type')){
+            header('Location: index.php?controllerRequest=emission_input_nav');
+            exit();
+        }
+        if(!HelperEmission::validateInput($unitTypeId, 'unit_type')){
+            header('Location: index.php?controllerRequest=emission_input_nav');
+            exit();
+        }
+        if(!HelperEmission::validateInput($unitQuantity, 'unit_quantity')){
+            header('Location: index.php?controllerRequest=emission_input_nav');
+            exit();
+        }
+        if(!HelperEmission::validateInputDates($emissionStartDate, $emissionEndDate)){
+            header('Location: index.php?controllerRequest=emission_input_nav');
+            exit();
+        }
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
+        include('../include/error.php');
         exit();
     }
-    if(!HelperEmission::validateInput($unitTypeId, 'unit_type')){
-        header('Location: index.php?controllerRequest=emission_input_nav');
-        exit();
-    }
-    if(!HelperEmission::validateInput($unitQuantity, 'unit_quantity')){
-        header('Location: index.php?controllerRequest=emission_input_nav');
-        exit();
-    }
-    if(!HelperEmission::validateInputDates($emissionStartDate, $emissionEndDate)){
-        header('Location: index.php?controllerRequest=emission_input_nav');
-        exit();
-    }
-    //input data is valid, remove old input from session
-    unset($_SESSION['old_input']);
-    
     //off put all calculation process to helper class. 
-    $isValidConversion = HelperEmission::calculateCo2eConversion($licenseeId, $emissionTypeId, $unitTypeId, $unitQuantity);
+    try{
+        $isValidConversion = HelperEmission::calculateCo2eConversion($licenseeId, $emissionTypeId, $unitTypeId, $unitQuantity);
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
+        include('../include/error.php');
+        exit();
+    }
 
     if(!$isValidConversion){
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
 
+    $co2eQuantity = $isValidConversion['co2e_quantity'];
+    $emissionFactorId = $isValidConversion['emission_factor_id'];
     //save to db
     try{
-        $licenseeId = $_SESSION['user']->getLicenseeId();
-
         //return new emission ID
-        $newEmissionId = EmissionDb::addEmissionLog($licenseeId, $userId, $emissionTypeId, $unitTypeId, $unitQuantity,  $co2eQuantity, $emissionFactor['id'], $notes, $emissionStartDate, $emissionEndDate);
-
-        $_SESSION['user_message'] = 'Emission log added successfully.';
+        $newEmissionId = EmissionDb::addEmissionLog($licenseeId, $userId, $emissionTypeId, $unitTypeId, $unitQuantity,  $co2eQuantity, $emissionFactorId, $notes, $emissionStartDate, $emissionEndDate);
 
     }catch(Exception $e){
         $error_message = $e->getMessage();
@@ -382,35 +393,44 @@ else if($controllerAction == 'submit_emission_input'){
         exit();
     }
 
-    //******************************************************************
-    //********** REFACTOR STOPPED HERE ******************************* */
-    //*******************************************************************
-    
-
     //emission input is successful
 
-    $isAlertTriggered = HelperEmission::calculateThresholdAndAlert($licenseeId, $newEmissionId, $emissionTypeId, $co2eQuantity, $emissionStartDate, $emissionEndDate);
+    try{
+        $isThresholdCheckValid = HelperEmission::calculateThresholdAndAlert($licenseeId, $newEmissionId, $emissionTypeId, $co2eQuantity, $emissionStartDate, $emissionEndDate);
+    }catch(Exception $e){
+        $error_message = $e->getMessage();
+        $_SESSION['error_message'] = $error_message;
+        $_SESSION['error_trace'] = $e->getTraceAsString();
+        include('../include/error.php');
+        exit();
+    }
 
-    if(!$isAlertTriggered){
+    if(!$isThresholdCheckValid){
         header('Location: index.php?controllerRequest=emission_input_nav');
         exit();
     }
+
+    //clear old input from session
+    unset($_SESSION['old_input']);
 
     //display pop up message to user via 'show_popup'. If alert was triggered, include that message in pop up as well.
-    if($newEmissionId > 0 && $newEmissionId !== false ){
-        $_SESSION['input_message'] = 'Emission log added successfully.';
 
-        //create flag to trigger pop up in view
-        $_SESSION['show_popup'] = true;
+    $_SESSION['input_message'] = 'Emission log added successfully.';
 
-        header('Location: index.php?controllerRequest=emission_input_nav');
-        exit();
+    //create flag to trigger pop up in view
+    $_SESSION['show_popup'] = true;
+
+    if(isset($_SESSION['alert_message'])){
+        $_SESSION['input_message'] .= ' ' . $_SESSION['alert_message'];
+        unset($_SESSION['alert_message']);
     }
-    //end of emission input
+
+    header('Location: index.php?controllerRequest=emission_input_nav');
+    exit();
+
+    //end of emission input  
 }
-//----------DEFAULT - DASHBOARD NAV-----------//
-//**
-//**  
+//----------DEFAULT - DASHBOARD NAV-----------// 
 else{
     //default action - go to dashboard
     header('Location: ../dashboard_manager/index.php?controllerRequest=dashboard_nav');

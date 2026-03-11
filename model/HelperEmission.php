@@ -11,33 +11,24 @@ class HelperEmission{
                 if($emissionTypeId === false || $emissionTypeId === null){
                     $_SESSION['error_message'] = 'Invalid emission type selection.';
                     return false;
-                }else{
-                    return true;
                 }
-                break;
+                return true;
             case 'unit_type':
                 $unitTypeId = $input;
                 if($unitTypeId === false || $unitTypeId === null){
                     $_SESSION['error_message'] = 'Invalid unit type selection.';
                     return false;
-                }else{
-                    return true;
                 }
-                break;
+                return true;
             case 'unit_quantity':
                 $unitQuantity = $input;
-                if($unitQuantity === false || $unitQuantity < 0){
+                if($unitQuantity === false || $unitQuantity === null || $unitQuantity < 0){
                     $_SESSION['error_message'] = 'Invalid unit quantity. Must be a non-negative number.';
                     return false;
-                }else{
-                    return true;
                 }
-                break;
+                return true;
             default:
-                $_SESSION['error_message'] = 'Invalid input validation type.';
-                $_SESSION['error_trace'] = 'HelperEmission::validateInput received an invalid $strOfInput value: ' . $strOfInput;
-                include('../include/error.php');
-                exit();
+                throw new Exception('HelperEmission::validateInput received an invalid $strOfInput value: ' . $strOfInput);
         }
     }
     //emission date input validation
@@ -90,8 +81,8 @@ class HelperEmission{
         }
 
         //get BASE unit type id for this group
-        $baseUnitType = EmissionDb::getBaseUnitTypeByGroup($selectedUnitType['base_unit_type_id']);
-        if(!$baseUnitType || $baseUnitType === false || $baseUnitType === null){
+        $baseUnitType = EmissionDb::getBaseUnitTypeById($selectedUnitType['base_unit_type_id']);
+        if($baseUnitType === false || $baseUnitType === null){
             $_SESSION['error_message'] = 'Base unit type not found for selected unit type.';
             return false;
         }
@@ -123,6 +114,11 @@ class HelperEmission{
             $_SESSION['error_message'] = 'Calculated CO₂e value is invalid.';
             return false;
         }
+
+        return [
+            'co2e_quantity' => $co2eQuantity,
+            'emission_factor_id' => $emissionFactor['id']
+        ];
     }
 
     public static function calculateThresholdAndAlert($licenseeId, $newEmissionId, $emissionTypeId, $co2eQuantity, $emissionStartDate, $emissionEndDate){
@@ -157,61 +153,53 @@ class HelperEmission{
             //compare co2e daily rate to threshold rate.
             if($co2eDailyRate > $limit){
                 //exceeds threshold, create alert log entry
-                try{
-                    //switch statment for alert message based on emission type
-                    
-                    switch($emissionTypeId){
-                        case 1: //Electricity - Grid
-                            $emissionTypeMessage = 'Electricity consumption from grid exceeds threshold.';
-                            break;
-                        case 2: //Electricity - Renewable
-                            $emissionTypeMessage = 'Electricity consumption from renewable sources exceeds threshold.';
-                            break;
-                        case 3: //Natural Gas - On-site Combustion
-                            $emissionTypeMessage = 'Natural gas usage exceeds threshold.';
-                            break;
-                        case 4: //Diesel Fuel - Backup Generators
-                            $emissionTypeMessage = 'Diesel fuel usage exceeds threshold.';
-                            break;
-                        case 5: //Refrigerant Leakage - Cooling Systems
-                            $emissionTypeMessage = 'Refrigerant leakage from cooling systems exceeds threshold.';
-                            break;
-                        case 6: //Water Usage - Cooling Systems
-                            $emissionTypeMessage = 'Water usage from cooling systems exceeds threshold.';
-                            break;
-                        case 7: //Waste - Electronic (E-waste)
-                            $emissionTypeMessage = 'Electronic waste generation exceeds threshold.';
-                            break;
-                        case 8: //Waste - General/Landfilled
-                            $emissionTypeMessage = 'General waste generation exceeds threshold.';
-                            break;
-                        default:
-                            $emissionTypeMessage = 'An emission entry exceeds threshold.';
-                    }
-
-                    $isvalidAlertLog = EmissionDb::addAlertLog($licenseeId, $newEmissionId, $emissionTypeId, $co2eDailyRate, $threshold['id'], $emissionTypeMessage);
-                }catch(Exception $e){
-                    $error_message = $e->getMessage();
-                    $_SESSION['error_message'] = $error_message;
-                    $_SESSION['error_trace'] = $e->getTraceAsString();
-                    include('../include/error.php');
-                    exit();
+            
+                //switch statment for alert message based on emission type
+                switch($emissionTypeId){
+                    case 1: //Electricity - Grid
+                        $emissionTypeMessage = 'Electricity consumption from grid exceeds threshold.';
+                        break;
+                    case 2: //Electricity - Renewable
+                        $emissionTypeMessage = 'Electricity consumption from renewable sources exceeds threshold.';
+                        break;
+                    case 3: //Natural Gas - On-site Combustion
+                        $emissionTypeMessage = 'Natural gas usage exceeds threshold.';
+                        break;
+                    case 4: //Diesel Fuel - Backup Generators
+                        $emissionTypeMessage = 'Diesel fuel usage exceeds threshold.';
+                        break;
+                    case 5: //Refrigerant Leakage - Cooling Systems
+                        $emissionTypeMessage = 'Refrigerant leakage from cooling systems exceeds threshold.';
+                        break;
+                    case 6: //Water Usage - Cooling Systems
+                        $emissionTypeMessage = 'Water usage from cooling systems exceeds threshold.';
+                        break;
+                    case 7: //Waste - Electronic (E-waste)
+                        $emissionTypeMessage = 'Electronic waste generation exceeds threshold.';
+                        break;
+                    case 8: //Waste - General/Landfilled
+                        $emissionTypeMessage = 'General waste generation exceeds threshold.';
+                        break;
+                    default:
+                        $emissionTypeMessage = 'An emission entry exceeds threshold.';
                 }
+                
+                //exception caught in controller.
+                $isValidAlertLog = EmissionDb::addAlertLog($licenseeId, $newEmissionId, $emissionTypeId, $co2eDailyRate, $threshold['id'], $emissionTypeMessage);
             }
 
-            if(!isset($isvalidAlertLog)){
+            if(!isset($isValidAlertLog)){
                 //no alert triggered, so this variable is not set. Set to null to avoid null errors
-                $isvalidAlertLog = null; 
+                $isValidAlertLog = null; 
             }
 
             //check if alert was triggered, set message.
-            if($isvalidAlertLog === false){
+            if($isValidAlertLog === false){
                 $_SESSION['error_message'] = 'Failed to create alert log entry for threshold exceedance. Please check your alert logs to confirm if an alert was created.';
                 return false;
-            }else if($isvalidAlertLog === true){
+            }else if($isValidAlertLog === true){
                 $_SESSION['alert_message'] = ' Alert log created for threshold exceedance.';
             }
-            
         }
         //default
         return true;
