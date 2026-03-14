@@ -4,7 +4,13 @@ require_once __DIR__ . '/../include/auth.php';
 
 header('Content-Type: application/json');
 
-$METABASE_SECRET_KEY = getenv('MB_EMBED_SECRET') ?: '919ef03ec76e955dc39c223c1adfd7463754c39c4848039f6a4b119347149f8d';
+$METABASE_SECRET_KEY = getenv('MB_EMBED_SECRET');
+
+if (!$METABASE_SECRET_KEY) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Metabase secret not configured']);
+    exit();
+}
 $DASHBOARD_ID = 3;
 
 // IMPORTANT: params must encode as {} not []
