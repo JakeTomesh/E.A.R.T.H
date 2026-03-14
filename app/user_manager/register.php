@@ -32,10 +32,10 @@ include('../include/auth.php');
                             <input type="hidden" name="controllerRequest" value="user_register">
                     
                             <label for="first_name">First Name:</label>
-                            <input type="text" id="first_name" name="first_name" required value="Jake">
+                            <input type="text" id="first_name" name="first_name" required value="Test">
                             <br>
                             <label for="last_name">Last Name:</label>
-                            <input type="text" id="last_name" name="last_name" required value="Tomesh">
+                            <input type="text" id="last_name" name="last_name" required value="Test">
                             <br>
                             <label for="email">Email:</label>
                             <input type="email" id="email" name="email" required value="test@test.com">
@@ -50,7 +50,8 @@ include('../include/auth.php');
                             </select>
                             <br>
                             <label for="licensee_key">Licensee Key:</label>
-                            <input type="text" id="licensee_key" name="licensee_key" required value="NFDS-7A9C2E41-B4D8-4F1E-9C3A-8D72E6A91F20">
+                            <input type="text" id="licensee_key" name="licensee_key" required value=<?php if($_SESSION['user']->getLicenseeId() == 1){echo 'NFDS-7A9C2E41-B4D8-4F1E-9C3A-8D72E6A91F20';}
+                            else if($_SESSION['user']->getLicenseeId() == 2){echo 'HCI-2F8D9B0C-61A4-43F0-A7E9-5C8B12D47AEE';}?>>
                             <br>
                             <button type="submit" id="submit" >Register</button>
                         </form>

@@ -107,11 +107,17 @@ This project is designed to run with seeded demo accounts from the provided SQL 
 
 Use the following placeholders and update them before publishing or sharing the repository:
 
-- **Admin username:** `TO BE FILLED`
-- **Admin password:** `TO BE FILLED`
-- **User username:** `TO BE FILLED`
-- **User password:** `TO BE FILLED`
+- **Company #1**
+- **Admin username:** `AAdmin`
+- **Admin password:** `TestPassword`
+- **User username:** `UUser`
+- **User password:** `TestPassword`
 
+- **Company #2**
+- **Admin username:** `AAdmin2`
+- **Admin password:** `TestPassword`
+- **User username:** `UUser2`
+- **User password:** `TestPassword`
 ---
 
 ## How Metabase Is Integrated

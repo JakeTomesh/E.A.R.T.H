@@ -48,11 +48,12 @@ class UserDb{
         }
     }
 
-    public static function checkForExistingUser($username){
+    public static function checkForExistingUser($username, $email){
         $db = Database::getDB();
-        $query = 'SELECT id FROM EarthUser WHERE username = :username';
+        $query = 'SELECT id FROM EarthUser WHERE username = :username OR email = :email';
         $statement = $db->prepare($query);
         $statement->bindValue(':username', $username);
+        $statement->bindValue(':email', $email);
         $statement->execute();
         $result = $statement->fetchAll();
         $statement->closeCursor();

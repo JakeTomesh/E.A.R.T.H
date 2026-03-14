@@ -1,9 +1,18 @@
-#dashboard_container{
+#dashboard_menu_grid{
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
     grid-gap: 1.5em;
     padding-top: 2em;
+}
+#quick_metrics_section{
+    margin-top: 2em;
+    width: 100%;
+}
+
+#menu_quick_metrics > div{
+    display: block;
+    min-height: 600px;
 }
 #menu_emission_input {
     grid-row: 1/2;
@@ -26,8 +35,8 @@
     grid-column: 7/9;
 }
 #menu_quick_metrics{
-    grid-row: 4/ -1;
-    grid-column: 1/span 12;
+    grid-row: 4/ 9;
+    grid-column: 1/ span 12;
 }
 
 .dashboard_menu_item>div{
@@ -75,7 +84,9 @@
     justify-content: center;
     margin: 1em;
 }
+
 /* Responsive Design */
-#dashboard_container:not(:has(#menu_admin_portal)) #menu_view_metrics{
+#dashboard_menu_grid:not(:has(#menu_admin_portal)) #menu_view_metrics{
     grid-column: 6/8;
 }
+

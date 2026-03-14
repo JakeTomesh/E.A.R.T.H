@@ -8,12 +8,12 @@ require_once '../include/auth.php';
   <?php include '../include/head.php'; ?>
   <link rel="stylesheet" href="styles/dashboard.css">
   <link rel="stylesheet" href="styles/metabase.css">
-  <script defer src="http://localhost:3000/app/embed.js"></script>
+  <script defer src="http://localhost:3001/app/embed.js"></script>
   <script>
     window.metabaseConfig = {
       theme: { preset: "dark" },
       isGuest: true,
-      instanceUrl: "http://localhost:3000"
+      instanceUrl: "http://localhost:3001"
     };
   </script>
 </head>
@@ -52,9 +52,6 @@ require_once '../include/auth.php';
           </div>
       </div>
     </main>
-    <script src="/Assignments/E.A.R.T.H/js/load_metabase_static_metrics.js"></script>
-    <footer>
-        <?php include('../include/footer.php'); ?>
-    </footer>
+    <script src="/js/load_metabase_static_metrics.js"></script>
 </body>
 </html>

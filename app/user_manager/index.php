@@ -113,7 +113,7 @@ else if($controllerAction == 'user_register'){
     $password = password_hash($password, PASSWORD_BCRYPT);
     try{
         //check if user exists
-        $userExists = UserDb::checkForExistingUser($username);
+        $userExists = UserDb::checkForExistingUser($username, $email);
         if($userExists == true){
             $_SESSION['error_message'] = "User already exists. Please try logging in.";
             header('Location: register.php');

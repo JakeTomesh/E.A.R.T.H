@@ -18,7 +18,7 @@
     text-align: center;
     border: 1px dotted black;
 }
-#edit_threshold{
+#edit_threshold, #edit_emission_factor{
     font-size: 100%;
     padding: .2rem .5rem;
 }
