@@ -8,13 +8,13 @@
     <?php include '../include/head.php'; ?>
     <link rel="stylesheet" href="styles/dashboard.css">
     <link rel="stylesheet" href="styles/metabase.css">
-    <script defer src="http://localhost:3000/app/embed.js"></script>
+    <script defer src="http://localhost:3001/app/embed.js"></script>
     <script>
         // Metabase reads this global config
         window.metabaseConfig = {
             theme: { preset: "dark" },
             isGuest: true,
-            instanceUrl: "http://localhost:3000"
+            instanceUrl: "http://localhost:3001"
         };
     </script>
 </head>
@@ -86,7 +86,7 @@
             </div>
         </div>
     </main>
-    <script src="/Assignments/E.A.R.T.H/js/load_metabase_dashboard.js"></script>
+    <script src="/js/load_metabase_dashboard.js"></script>
     <footer>
         <?php include('../include/footer.php'); ?>
     </footer>

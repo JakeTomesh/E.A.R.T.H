@@ -1,0 +1,52 @@
+name: earth-stack
+
+services:
+  php:
+    build: .
+    ports:
+      - "8082:80"
+    volumes:
+      - ./app:/var/www/html
+      - ./apache-config.conf:/etc/apache2/conf-enabled/zz-dir-browsing.conf
+    environment:
+      MB_EMBED_SECRET: ${MB_EMBED_SECRET}
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-earth}
+      MYSQL_USER: ${MYSQL_USER:-mgs_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    depends_on:
+      - db
+    ports:
+      - "8083:80"
+    environment:
+      PMA_HOST: db
+    volumes:
+      - ./phpmyadmin-config.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+
+  metabase:
+    image: metabase/metabase:latest
+    depends_on:
+      - db
+    ports:
+      - "3001:3000"
+    environment:
+      MB_SITE_URL: http://localhost:3001
+    volumes:
+      - metabase_data:/metabase.db
+
+volumes:
+  db_data:
+  metabase_data:
