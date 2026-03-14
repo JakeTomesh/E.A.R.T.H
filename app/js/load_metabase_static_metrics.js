@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     status.textContent = "Loading metrics…";
 
-    const res = await fetch("/Assignments/E.A.R.T.H/metrics_manager/metabase_token_static.php", {
+    const res = await fetch("metrics_manager/metabase_token_static.php", {
       credentials: "same-origin"
     });
 

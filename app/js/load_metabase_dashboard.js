@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     status.textContent = "Loading dashboard...";
 
-    const response = await fetch("/Assignments/E.A.R.T.H/metrics_manager/metabase_token.php", {
+    const response = await fetch("metrics_manager/metabase_token.php", {
   credentials: "same-origin",
 });
 
