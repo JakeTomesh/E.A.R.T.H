@@ -68,22 +68,22 @@
             const userLoginButtonLicense2 = document.getElementById('user_login_button_license_2');
 
             adminLoginButtonLicense1.addEventListener('click', () => {
-                document.getElementById('username').value = 'JTomesh';
+                document.getElementById('username').value = 'AAdmin';
                 document.getElementById('password').value = 'TestPassword';
             });
 
             userLoginButtonLicense1.addEventListener('click', () => {
-                document.getElementById('username').value = 'JDoe';
+                document.getElementById('username').value = 'UUser';
                 document.getElementById('password').value = 'TestPassword';
             });
 
             adminLoginButtonLicense2.addEventListener('click', () => {
-                document.getElementById('username').value = 'ABangsberg';
+                document.getElementById('username').value = 'AAdmin2';
                 document.getElementById('password').value = 'TestPassword';
             });
 
             userLoginButtonLicense2.addEventListener('click', () => {
-                document.getElementById('username').value = 'JRybacki';
+                document.getElementById('username').value = 'UUser2';
                 document.getElementById('password').value = 'TestPassword';
             });
         })

@@ -17,7 +17,7 @@ main{
 /* The shell is the box the embed must fill */
 .mb-embed-shell{
   width: 100%;
-  height: calc(100vh - 220px); /* adjust this number to your header/title height */
+  height: calc(100vh); /* adjust this number to your header/title height */
   min-height: 600px;          /* safety so it’s usable on shorter viewports */
 }
 

@@ -37,10 +37,12 @@ html, body{
 }
 body{
     min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
 }
 main{
     flex: 1;
-    min-height: 0;
+
 }
 #logo img{
     position: relative;
@@ -187,6 +189,7 @@ footer{
     text-align: center;
     letter-spacing: .1em;
     padding: .2em 0;
+   
 }
 footer p {
     margin-top: .7em;
