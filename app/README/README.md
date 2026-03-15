@@ -199,7 +199,7 @@ This project uses a manual SQL import.
 Open phpMyAdmin:
 
 ```text
-http://localhost:8081
+http://localhost:8083
 ```
 
 Then log in with:
@@ -219,19 +219,19 @@ php/Assignments/E.A.R.T.H/README/dbScript/earth.sql
 Application:
 
 ```text
-http://localhost:8080/Assignments/E.A.R.T.H/
+http://localhost:8082
 ```
 
 phpMyAdmin:
 
 ```text
-http://localhost:8081
+http://localhost:8083
 ```
 
 Metabase:
 
 ```text
-http://localhost:3000
+http://localhost:3001
 ```
 
 ---
@@ -239,7 +239,7 @@ http://localhost:3000
 ## Default Container Services
 
 ### PHP / Apache
-Serves the application at port `8080`.
+Serves the application at port `8082`.
 
 ### MySQL
 Provides the relational database used by the application and by Metabase as a data source.
@@ -258,11 +258,11 @@ Metabase is persisted with a Docker volume so its internal state survives contai
 
 The included `docker-compose.yml` is set up to:
 
-- serve the PHP app from `./php:/var/www/html`
-- expose Apache on port `8080`
-- expose MySQL on port `3306`
-- expose phpMyAdmin on port `8081`
-- expose Metabase on port `3000`
+- serve the PHP app from `./app:/var/www/html`
+- expose Apache on port `8082`
+- expose MySQL on port `3307`
+- expose phpMyAdmin on port `8083`
+- expose Metabase on port `3001`
 
 Because the application code connects to MySQL using host `db`, all services run on the same Compose network.
 
@@ -312,9 +312,10 @@ Make sure:
 
 ### Metabase dashboard does not load
 Check:
-- the Metabase container is running on port `3000`
+- the Metabase container is running on port `3001`
 - `MB_EMBED_SECRET` matches the Metabase embedding secret
 - the dashboard ID used in `metabase_token.php` exists in your Metabase instance
+- for demo purposes, Metabase dashboards may not sync as expected. Please refer to the docs folder for application screenshots
 
 ### Login does not work
 Make sure:
@@ -335,17 +336,6 @@ This project is educational, but it follows several real-world practices:
 
 Before publishing the repository publicly, review and remove any real secrets, tokens, or private credentials.
 
----
-
-## Future Improvements
-
-Potential next steps for the project include:
-
-- environment-based configuration throughout the app
-- stronger secret management
-- automated SQL import for onboarding
-- Dockerized app-specific production configuration
-- additional analytics and reporting polish
 
 ---
 
