@@ -60,12 +60,14 @@ The application is organized using an MVC-style structure and includes both user
     ├── styles/
     ├── user_manager/
     └── index.php
-    ├── .env
-    ├── apache-config.conf
-    ├── docker-compose.yml
-    ├── Dockerfile
-    ├── phpmyadmin-config.inc.php
     └── README
+├── db/
+    ├── earth.sql
+├── .env
+├── apache-config.conf
+├── docker-compose.yml
+├── Dockerfile
+├── phpmyadmin-config.inc.php
 ```
 
 ### Important Files
