@@ -23,7 +23,7 @@
         <div id="container" class="background_img">
             <div id="title_container">
                 <div id="title">
-                    <h1>E.A.R.T.H</h1>
+                    <h1>E.A.R.T.H.</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
                     <div id="user_nav_div">
                         <a href="emission_manager/index.php?controllerRequest=alert_logs_nav" 

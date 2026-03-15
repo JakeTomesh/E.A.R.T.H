@@ -21,9 +21,9 @@
             <div id="login_container">
                 <div id="title">
                     <div id="logo_index">
-                        <img src="misc/images/logo.png" alt="E.A.R.T.H Logo">
+                        <img src="misc/images/logo.png" alt="E.A.R.T.H. Logo">
                     </div>
-                    <h1>E.A.R.T.H</h1>
+                    <h1>E.A.R.T.H.</h1>
                     <h2>Emission and Resource Tracking Hub</h2>
                 </div>
                 <div><span><?php echo htmlspecialchars($message); ?></span></div>
