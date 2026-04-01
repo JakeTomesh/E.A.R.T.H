@@ -51,5 +51,6 @@ class HelperEmission{
             $_SESSION['error_message'] = 'Emission end date cannot be before start date.';
             return false;
         }
+        return true;
     }
 }
