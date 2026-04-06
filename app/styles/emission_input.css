@@ -1,0 +1,90 @@
+
+
+#fieldset_container{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    grid-gap: 1em;
+}
+fieldset{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 1em;
+    background-color: var(--background-color-opaque);
+}
+#page_title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#emission_type_fieldset{
+    grid-row: 1/2;
+    grid-column: 2/4;
+}
+#unit_type_fieldset{
+    grid-row: 2/3;
+    grid-column: 2/4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+}
+#datetime_fieldset{
+    grid-row: 3/4;
+    grid-column: 2/4;
+}
+#notes_fieldset{
+    grid-row: 1/4;
+    grid-column: 4/7;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+#notes_fieldset textarea{
+    min-height: 100%;
+    width: 100%;
+    padding: 15px;
+}
+
+fieldset{
+    padding: 1em;
+}
+fieldset legend{
+    background-color: var(--background-color);
+    padding: .2em;
+    border: 2px solid black;
+}
+#datetime_fieldset div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 1em;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.input{
+    min-height: 2em;
+}
+#unit_quantity{
+    max-width: 40%;
+}
+#datepicker{
+    min-width: 10em;
+}
+
+#emission_input_error_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width:800px){
+    #notes_fieldset{
+        grid-column: 4/-1;
+    }
+}

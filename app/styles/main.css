@@ -1,0 +1,203 @@
+@font-face{
+    font-family: 'Slabo';
+    src: url(../misc/fonts/Slabo27px-Regular.ttf);
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face{
+    font-family: 'ZenDots';
+    src: url(../misc/fonts/ZenDots-Regular.ttf);
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --primary-color: #554348;
+    --secondary-color: #2C6E49;
+    --tertiary-color-1: #8B4513;
+    --tertiary-color-2: #47B378;
+    --background-color: #a0b6c4c0;
+    --background-color-opaque: #a0b6c470;
+    --text-color: #0F0F0F;
+    --font-primary: 'Slabo', Georgia, serif;
+    --font-secondary: 'ZenDots', Times, serif ;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-primary);
+}
+html, body{
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+body{
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+main{
+    flex: 1;
+
+}
+#logo img{
+    position: relative;
+    top: auto;
+    max-width: 50px;
+}
+#logo_index img{
+    display: block;
+    max-width: 80px;
+}
+.background_img{
+    min-height: 100%;
+    width: 100%;
+    background-image: url("../misc/images/landscape_background_steelblue.png");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size:cover;
+    box-shadow: inset 3px 0px 20px 1px white;
+}
+#title *{
+    font-family: var(--font-secondary);
+
+}
+#title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+#title h1{
+    color: var(--primary-color)
+}
+#title h2{
+    text-align: center;
+}
+#animated_line {
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(34, 33, 37, 0.856);
+    border-radius: 10px;
+    margin-top: 10px;
+    transform: scaleX(0);
+    transform-origin: center;
+    animation: drawLine 2s ease-out forwards;
+}
+
+@keyframes drawLine {
+    to {
+        transform: scaleX(.7);
+    }
+}
+#user_nav_div{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    position: relative;
+    margin-bottom: .1em;
+}
+#title_message{
+   margin: 0 auto;
+}
+#logout{
+   position: absolute;
+   right: 1rem;
+   padding: .1em 1em;
+}
+#back{
+    position: absolute;
+    left: 1rem;
+    padding: .1em 1em;
+}
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #7a7a7a41;
+    color: var(--text-color);
+    font-size: .7rem;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--primary-color);
+}
+.btn:hover {
+    background-color: #55555588;
+    color: var(--text-color);
+}
+.error_message{
+    display: flex;
+    color: red;
+    margin: 1em;
+    text-align: center;
+    text-shadow: 1px 1px 5px rgb(97, 97, 97);
+}
+.user_message{
+    color: var(--secondary-color);
+    font-size: 120%;
+    margin: 1em;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgb(95, 160, 100);
+}
+#page_title{
+    margin-top: 2em;
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+#submit{
+    margin: 2em;
+    max-width: 60%;
+    padding: 0.5rem 1rem;
+    align-self: center;
+    font-weight: bold;
+    border: 2px solid black;
+    background-color: var(--background-color);
+    border-radius: 10px;
+}
+#submit:hover{
+    background-color: var(--tertiary-color-2);
+    transform: scale(1.05); 
+}
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#show_hide_pass{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 3em;
+    font-size: 80%;
+    min-width: 90%;
+}
+#toggle_password{
+    width: 10%;
+}
+
+footer{
+    background: linear-gradient(to bottom, white , var(--primary-color) 30%);
+    font-size: 80%;
+    color: white;
+    text-align: center;
+    letter-spacing: .1em;
+    padding: .2em 0;
+   
+}
+footer p {
+    margin-top: .7em;
+}
+/*Media Queries */
+@media (max-width: 950px){
+  #user_nav_div{
+    margin-bottom: 0;
+    margin-top:1.5em;
+   }
+}
