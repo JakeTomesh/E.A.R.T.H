@@ -196,6 +196,8 @@ This starts:
 
 This project uses a manual SQL import.
 
+(you may need to create the database 'earth' manually if you do not have the correct privlages before running the script)
+
 Open phpMyAdmin:
 
 ```text
@@ -211,8 +213,9 @@ Then log in with:
 Create or confirm the `earth` database exists, then import:
 
 ```text
-php/Assignments/E.A.R.T.H/README/dbScript/earth.sql
+php/Assignments/E.A.R.T.H/db/earth.sql
 ```
+
 
 ### 5. Open the application
 

@@ -11,16 +11,15 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- Before importing:
+-- 1. Create a database in phpMyAdmin
+-- 2. Select that database
+-- 3. Run/import this script to create tables and seed data
 
 --
 -- Database: `earth`
 --
-
+-- Ensure the database exists and is selected before running script
 -- --------------------------------------------------------
 
 --
@@ -403,7 +402,6 @@ ALTER TABLE `EarthUser`
 ALTER TABLE `EmissionFactor`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_emissionfactor` (`licensee_id`,`emission_type_id`,`physical_unit_type_id`),
-  ADD UNIQUE KEY `licensee_id` (`licensee_id`,`emission_type_id`,`physical_unit_type_id`),
   ADD KEY `fk_emfactor_emission_type` (`emission_type_id`),
   ADD KEY `fk_emfactor_physical_unit` (`physical_unit_type_id`),
   ADD KEY `fk_emfactor_co2e_unit` (`co2e_unit_type_id`),
@@ -526,22 +524,22 @@ ALTER TABLE `AlertLog`
   ADD CONSTRAINT `fk_alert_co2e_unit` FOREIGN KEY (`co2e_unit_type_id`) REFERENCES `UnitType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_alert_emission_log` FOREIGN KEY (`emission_log_id`) REFERENCES `EmissionLog` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_alert_emission_type` FOREIGN KEY (`emission_type_id`) REFERENCES `EmissionType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_alert_threshold` FOREIGN KEY (`threshold_limit_id`) REFERENCES `ThresholdLimit` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
+  ADD CONSTRAINT `fk_alert_threshold` FOREIGN KEY (`threshold_limit_id`) REFERENCES `ThresholdLimit` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_alert_licensee` FOREIGN KEY (`licensee_id`) REFERENCES `Licensee` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 --
 -- Constraints for table `EarthUser`
 --
 ALTER TABLE `EarthUser`
-  ADD CONSTRAINT `fk_earthuser_role_type` FOREIGN KEY (`role_type_id`) REFERENCES `RoleType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
+  ADD CONSTRAINT `fk_earthuser_role_type` FOREIGN KEY (`role_type_id`) REFERENCES `RoleType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_earthuser_licensee` FOREIGN KEY (`licensee_id`) REFERENCES `Licensee` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 --
 -- Constraints for table `EmissionFactor`
 --
 ALTER TABLE `EmissionFactor`
   ADD CONSTRAINT `fk_emfactor_co2e_unit` FOREIGN KEY (`co2e_unit_type_id`) REFERENCES `UnitType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_emfactor_emission_type` FOREIGN KEY (`emission_type_id`) REFERENCES `EmissionType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_emfactor_physical_unit` FOREIGN KEY (`physical_unit_type_id`) REFERENCES `UnitType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
+  ADD CONSTRAINT `fk_emfactor_physical_unit` FOREIGN KEY (`physical_unit_type_id`) REFERENCES `UnitType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_emfactor_licensee` FOREIGN KEY (`licensee_id`) REFERENCES `Licensee` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 --
 -- Constraints for table `EmissionLog`
 --
@@ -550,15 +548,16 @@ ALTER TABLE `EmissionLog`
   ADD CONSTRAINT `fk_emlog_emission_factor` FOREIGN KEY (`emission_factor_id`) REFERENCES `EmissionFactor` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_emlog_emission_type` FOREIGN KEY (`emission_type_id`) REFERENCES `EmissionType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_emlog_unit` FOREIGN KEY (`unit_type_id`) REFERENCES `UnitType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_emlog_user` FOREIGN KEY (`user_id`) REFERENCES `EarthUser` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
+  ADD CONSTRAINT `fk_emlog_user` FOREIGN KEY (`user_id`) REFERENCES `EarthUser` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_emlog_licensee` FOREIGN KEY (`licensee_id`) REFERENCES `Licensee` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+            
 --
 -- Constraints for table `ThresholdLimit`
 --
 ALTER TABLE `ThresholdLimit`
   ADD CONSTRAINT `fk_threshold_co2e_unit` FOREIGN KEY (`co2e_unit_type_id`) REFERENCES `UnitType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_threshold_emission_type` FOREIGN KEY (`emission_type_id`) REFERENCES `EmissionType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
+  ADD CONSTRAINT `fk_threshold_emission_type` FOREIGN KEY (`emission_type_id`) REFERENCES `EmissionType` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_threshold_licensee` FOREIGN KEY (`licensee_id`) REFERENCES `Licensee` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 --
 -- Constraints for table `UnitType`
 --
@@ -566,6 +565,5 @@ ALTER TABLE `UnitType`
   ADD CONSTRAINT `fk_unit_base_type` FOREIGN KEY (`base_unit_type_id`) REFERENCES `BaseUnitType` (`id`);
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
