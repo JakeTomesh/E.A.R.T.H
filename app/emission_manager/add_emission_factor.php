@@ -50,7 +50,7 @@ require_once('../include/auth.php');
                         </select>
                         <br>
                         <label for="emission_factor">Factor:</label>
-                        <input type="number" step="0.01" min="0" id="emission_factor" name="emission_factor" required>
+                        <input type="number" step="0.000001" min="0" id="emission_factor" name="emission_factor" required>
                         <br>
                         <button type="submit" id="submit">Add Emission Factor</button>
                     </form>

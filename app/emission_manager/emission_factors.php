@@ -69,7 +69,7 @@ include('../include/auth.php');
                         <div>
                             <form action="emission_manager/index.php" method="post">
                                 <input type="hidden" name="controllerRequest" value="add_emission_factor_nav">
-                                <button type="submit" id="submit">Add Emission Factor</button>
+                                <button type="submit" id="submit" class="btn_submit">Add Emission Factor</button>
                             </form>
                         </div>
                     </div>

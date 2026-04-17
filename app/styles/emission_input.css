@@ -83,6 +83,13 @@ form {
     align-items: center;
 }
 
+#reset{
+    margin-top: 0em;
+}
+#reset:hover{
+    background-color: rgb(252, 97, 97);
+    transform: scale(1.05); 
+}
 @media (max-width:800px){
     #notes_fieldset{
         grid-column: 4/-1;

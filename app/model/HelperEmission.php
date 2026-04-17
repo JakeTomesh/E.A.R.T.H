@@ -79,16 +79,16 @@ class HelperEmission{
             $_SESSION['error_message'] = 'Calculated base quantity is invalid.';
             return false;
         }
-
+        /* Debugging code to check base quantity calculation
         //get BASE unit type id for this group
         $baseUnitType = EmissionDb::getBaseUnitTypeById($selectedUnitType['base_unit_type_id']);
         if($baseUnitType === false || $baseUnitType === null){
             $_SESSION['error_message'] = 'Base unit type not found for selected unit type.';
             return false;
         }
-
+                */
         //get emission factor for this emission type and BASE unit type
-        $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($licenseeId, $emissionTypeId, $baseUnitType['id']);
+        $emissionFactor = EmissionDb::getEmissionFactorBasedOnUnitType($licenseeId, $emissionTypeId, $selectedUnitType['id']);
 
         if ($emissionFactor === false || $emissionFactor === null) {
             $_SESSION['error_message'] = 'No emission factor found for the selected emission type (base unit).';

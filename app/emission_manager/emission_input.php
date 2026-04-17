@@ -1,15 +1,6 @@
 <?php 
     require_once '../include/bootstrap.php';
     require_once '../include/auth.php'; 
-
-    $oldInput = $_SESSION['old_input'] ?? [];
-
-    $selectedEmissionTypeId = $oldInput['emission_type'] ?? '';
-    $selectedUnitTypeId = $oldInput['unit_type'] ?? '';
-    $unitQuantity = $oldInput['unit_quantity'] ?? '';
-    $emissionStartDate = $oldInput['emission_start_date'] ?? '';
-    $emissionEndDate = $oldInput['emission_end_date'] ?? '';
-    $notes = $oldInput['notes'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,9 +39,9 @@
                         if(isset($_SESSION['show_popup']) && $_SESSION['show_popup']){
                             if (isset($_SESSION['alert_message'])) {
                                 $message = $_SESSION['alert_message'] . ' ' . $_SESSION['input_message'];
-                                echo '<script>alert(' . json_encode($message) . ');</script>';
+                                echo '<span class="user_message">' . htmlspecialchars($message) . '</span>';
                             } else {
-                                echo '<script>alert(' . json_encode($_SESSION['input_message']) . ');</script>';
+                                echo '<span class="user_message">' . htmlspecialchars($_SESSION['input_message']) . '</span>';
                             }
                             unset($_SESSION['show_popup']);
                             $_SESSION['show_popup'] = false;
@@ -116,9 +107,12 @@
                             <textarea name="notes" rows="4" cols="50" placeholder="Specific notes about this emission log..."><?php echo htmlspecialchars($notes); ?></textarea>
                         </fieldset>
                     </div>
-                    <button type="submit" id="submit">Submit Emission Data</button>
+                    <button type="submit" id="submit" class="btn_submit">Submit Emission Data</button>
                 </form>
-                <?php unset($_SESSION['old_input']); ?>
+                <form action="emission_manager/index.php" method="POST">
+                        <input type="hidden" name="controllerRequest" value="reset_emission_input">
+                        <button type="submit" id="reset" class="btn_submit">Reset Form</button>
+                </form>
             </div>
         </div>
     </main>

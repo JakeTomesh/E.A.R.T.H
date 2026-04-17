@@ -63,7 +63,7 @@ require_once('../include/auth.php');
                             <input type="checkbox" id="toggle_password">
                             <label for="toggle_password">Show Password</label>
                         </div>
-                        <button type="submit" id="submit">Save Changes</button>
+                        <button type="submit" id="submit" class="btn_submit">Save Changes</button>
                     </form>
                     <div>
                         <?php 

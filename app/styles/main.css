@@ -150,7 +150,7 @@ main{
     text-decoration: underline;
     color: var(--primary-color);
 }
-#submit{
+.btn_submit{
     margin: 2em;
     max-width: 60%;
     padding: 0.5rem 1rem;
@@ -160,7 +160,7 @@ main{
     background-color: var(--background-color);
     border-radius: 10px;
 }
-#submit:hover{
+.btn_submit:hover{
     background-color: var(--tertiary-color-2);
     transform: scale(1.05); 
 }

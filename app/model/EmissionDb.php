@@ -196,7 +196,7 @@ class EmissionDb{
                 JOIN UnitType ut ON ef.physical_unit_type_id = ut.id
                 JOIN UnitType ut2 ON ef.co2e_unit_type_id = ut2.id
                 WHERE ef.licensee_id = :licenseeId
-                ORDER BY ef.id';
+                ORDER BY et.name, ut.name';
         $statement = $db->prepare($query);
         $statement->bindValue(':licenseeId', $licenseeId, PDO::PARAM_INT);
         $statement->execute();
@@ -323,16 +323,17 @@ class EmissionDb{
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
-
+    /*
     public static function getBaseUnitTypeById($baseUnitId){
         $db = Database::getDB();
-        $query = 'SELECT id, code, name, base_unit_type_id, is_base_unit, conversion_factor
-                FROM UnitType
-                WHERE id = :baseUnitId AND is_base_unit = 1
+        $query = 'SELECT id, code 
+                FROM BaseUnitType
+                WHERE id = :baseUnitId 
                 LIMIT 1';
         $statement = $db->prepare($query);
         $statement->bindValue(':baseUnitId', $baseUnitId, PDO::PARAM_INT);
         $statement->execute();
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
+    */
 }

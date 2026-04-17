@@ -39,7 +39,7 @@ require_once('../include/auth.php');
                         <label for="unit_type">Unit Type:</label>
                         <input type="text" id="unit_type" name="unit_type" disabled value="<?php echo htmlspecialchars($thresholdToEdit['unit_type_name'].'/Day'); ?>">
                         <br>
-                        <button type="submit" id="submit">Save Changes</button>
+                        <button type="submit" id="submit" class="btn_submit">Save Changes</button>
                     </form>
                     <div>
                         <?php 

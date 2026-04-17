@@ -53,7 +53,7 @@ include('../include/auth.php');
                             <input type="text" id="licensee_key" name="licensee_key" required value=<?php if($_SESSION['user']->getLicenseeId() == 1){echo 'NFDS-7A9C2E41-B4D8-4F1E-9C3A-8D72E6A91F20';}
                             else if($_SESSION['user']->getLicenseeId() == 2){echo 'HCI-2F8D9B0C-61A4-43F0-A7E9-5C8B12D47AEE';}?>>
                             <br>
-                            <button type="submit" id="submit" >Register</button>
+                            <button type="submit" id="submit" class="btn_submit" >Register</button>
                         </form>
                         <div>
                             <?php 
