@@ -99,7 +99,12 @@ INSERT INTO `EarthUser` (`id`, `email`, `first_name`, `last_name`, `username`, `
 (11, 'test@test.com', 'Jake', 'Tomesh', 'JTomesh', '$2y$10$JWCgf8XrR70CKrIu3dWdoePPQ4RGcuVjPSK5F6oNUe4yKFwuU4hPS', 2, '2026-01-28 21:08:01', '2026-02-06 21:46:08', 1, 1),
 (16, 'JDoe@test.com', 'John', 'Doe', 'JDoe', '$2y$10$uSg2bRTZrbdy3iiVRiGWkueg2.JZtH2cPUrFaANBNUMya2Xga17be', 1, '2026-01-30 22:00:45', '2026-02-23 21:10:42', 1, 0),
 (19, 'Abangsberg@test.com', 'Andy', 'Bangsberg', 'ABangsberg', '$2y$10$Uw7AhJGQgkJ8BSnwhMaxRuH4NGphpSHKyQgN7/F7bLIlYfgvyj7Z.', 2, '2026-03-08 15:42:20', '2026-03-08 15:42:20', 2, 1),
-(20, 'JRybacki@test.com', 'Jeff', 'Rybacki', 'JRybacki', '$2y$10$AMTagwTmqio3.8Bkebm6kOs8Bv.7njk6lZFFEmi79ZQBhdCKcx4cG', 1, '2026-03-08 15:47:51', '2026-03-08 15:47:51', 2, 1);
+(20, 'JRybacki@test.com', 'Jeff', 'Rybacki', 'JRybacki', '$2y$10$AMTagwTmqio3.8Bkebm6kOs8Bv.7njk6lZFFEmi79ZQBhdCKcx4cG', 1, '2026-03-08 15:47:51', '2026-03-08 15:47:51', 2, 1),
+(21, 'admin@test.com', 'Admin', 'Admin', 'AAdmin', '$2y$10$D8TKaqNeRbK.l4Q/Y3f3zObpxObKHaLB8AHhYsXniSXacJnKtbz6e', 2, '2026-04-19 02:47:25', '2026-04-19 02:47:25', 1, 1),
+(22, 'User@test.com', 'User', 'User', 'UUser', '$2y$10$8I3bkgmyP9v8UYOUVAF8NuNCbEeRzKrZ7dTiw9F9QKkE2vIBL0SxG', 1, '2026-04-19 02:47:51', '2026-04-19 02:47:51', 1, 1),
+(23, 'Admin2@test.com', 'Admin', 'Admin2', 'AAdmin2', '$2y$10$/PuRxi9R3cswN927BI2gN.DhyyRKZC33EaCzI.6TnqV05DPO6UgOe', 2, '2026-04-19 02:49:14', '2026-04-19 02:49:14', 2, 1),
+(24, 'User2@gmail.com', 'User', 'User2', 'UUser2', '$2y$10$IeNz/.AwHj3TF/xp1W5wVeIK4QVr8PpODvUY2QGqPqk4c0YNWW0e6', 1, '2026-04-19 02:49:46', '2026-04-19 02:49:46', 2, 1);
+
 
 -- --------------------------------------------------------
 
